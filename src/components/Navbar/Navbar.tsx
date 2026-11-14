@@ -16,7 +16,9 @@ const navLinks = [
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const [hoveredPath, setHoveredPath] = useState<string | null>(null);
     const location = useLocation();
+    const currentPath = location.pathname.replace(/\/$/, "") || "/";
     const [prevPathname, setPrevPathname] = useState(location.pathname);
 
     // fecha o menu ao entrar em nova rota
@@ -74,13 +76,34 @@ export default function Navbar() {
             <LogoArgos className="text-[28px] text-bege" />
 
             {/* navegação desktop (normal acima de 850px, oculta em 850px) */}
-            <nav aria-label="Principal" className="flex max-[851px]:hidden flex-wrap gap-0.5 text-base font-medium">
-                <Link to="/" className="relative rounded-[10px] px-3.5 py-2.5 text-bege transition-transform duration-150 hover:scale-[1.04] focus-visible:scale-[1.04] after:absolute after:right-3.5 after:bottom-1.5 after:left-3.5 after:h-0.5 after:origin-left after:scale-x-0 after:bg-salvia after:transition-transform after:duration-150 hover:after:scale-x-100 focus-visible:after:scale-x-100">Início</Link>
-                <Link to="/sobre" className="relative rounded-[10px] px-3.5 py-2.5 text-texto-2 transition-colors duration-150 hover:text-bege focus-visible:text-bege after:absolute after:right-3.5 after:bottom-1.5 after:left-3.5 after:h-0.5 after:origin-left after:scale-x-0 after:bg-salvia after:transition-transform after:duration-150 hover:after:scale-x-100 focus-visible:after:scale-x-100">Sobre</Link>
-                <Link to="/solucao" className="relative rounded-[10px] px-3.5 py-2.5 text-texto-2 transition-colors duration-150 hover:text-bege focus-visible:text-bege after:absolute after:right-3.5 after:bottom-1.5 after:left-3.5 after:h-0.5 after:origin-left after:scale-x-0 after:bg-salvia after:transition-transform after:duration-150 hover:after:scale-x-100 focus-visible:after:scale-x-100">Solução</Link>
-                <Link to="/integrantes" className="relative rounded-[10px] px-3.5 py-2.5 text-texto-2 transition-colors duration-150 hover:text-bege focus-visible:text-bege after:absolute after:right-3.5 after:bottom-1.5 after:left-3.5 after:h-0.5 after:origin-left after:scale-x-0 after:bg-salvia after:transition-transform after:duration-150 hover:after:scale-x-100 focus-visible:after:scale-x-100">Integrantes</Link>
-                <Link to="/faq" className="relative rounded-[10px] px-3.5 py-2.5 text-texto-2 transition-colors duration-150 hover:text-bege focus-visible:text-bege after:absolute after:right-3.5 after:bottom-1.5 after:left-3.5 after:h-0.5 after:origin-left after:scale-x-0 after:bg-salvia after:transition-transform after:duration-150 hover:after:scale-x-100 focus-visible:after:scale-x-100">FAQ</Link>
-                <Link to="/contato" className="relative rounded-[10px] px-3.5 py-2.5 text-texto-2 transition-colors duration-150 hover:text-bege focus-visible:text-bege after:absolute after:right-3.5 after:bottom-1.5 after:left-3.5 after:h-0.5 after:origin-left after:scale-x-0 after:bg-salvia after:transition-transform after:duration-150 hover:after:scale-x-100 focus-visible:after:scale-x-100">Contato</Link>
+            <nav
+                aria-label="Principal"
+                onMouseLeave={() => setHoveredPath(null)}
+                onBlur={(event) => {
+                    if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                        setHoveredPath(null);
+                    }
+                }}
+                className="flex max-[851px]:hidden flex-wrap gap-0.5 text-base font-medium"
+            >
+                {navLinks.map((item) => {
+                    const isActive = currentPath === item.to;
+                    const isHighlighted = hoveredPath === null ? isActive : hoveredPath === item.to;
+                    return (
+                        <Link
+                            key={item.to}
+                            to={item.to}
+                            onMouseEnter={() => setHoveredPath(item.to)}
+                            onFocus={() => setHoveredPath(item.to)}
+                            aria-current={isActive ? "page" : undefined}
+                            className={`relative rounded-[10px] px-3.5 py-2.5 transition-colors duration-150 after:absolute after:right-3.5 after:bottom-1.5 after:left-3.5 after:h-0.5 after:origin-left after:bg-salvia after:transition-transform after:duration-150 ${
+                                isHighlighted ? "text-bege after:scale-x-100" : "text-texto-2 after:scale-x-0"
+                            }`}
+                        >
+                            {item.label}
+                        </Link>
+                    );
+                })}
             </nav>
 
             {/* botão cta desktop (normal acima de 850px, oculto em 850px) */}
@@ -136,7 +159,7 @@ export default function Navbar() {
             >
                 <nav aria-label="Links móveis" className="flex flex-col gap-1.5">
                     {navLinks.map((item) => {
-                        const isActive = location.pathname === item.to;
+                        const isActive = currentPath === item.to;
                         return (
                             <Link
                                 key={item.to}
