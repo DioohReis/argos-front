@@ -7,7 +7,7 @@ export default function Footer() {
             <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-4 px-7">
                 <LogoArgos className="text-[22px]" />
                 <p className="text-[15px] text-texto-2">
-                    © 2026 Argos · FIAP Global Solution · CitizenTech · ODS 2, 13 e 10. Personas e avisos de exemplo são fictícios.
+                    © 2026 Argos · FIAP Global Solution · CitizenTech · ODS 2, 13 e 10.
                 </p>
             </div>
         </footer>
