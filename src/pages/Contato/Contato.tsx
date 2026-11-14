@@ -57,7 +57,7 @@ export default function Contato() {
             <ScrollReveal />
 
             {/*hero*/}
-            <section id="inicio" className="relative overflow-hidden bg-[radial-gradient(700px_420px_at_84%_30%,rgba(125,190,140,.16),transparent_70%),radial-gradient(520px_320px_at_6%_0%,rgba(217,166,80,.10),transparent_70%),#17110D]">
+            <section id="inicio" className="relative overflow-x-clip overflow-y-visible bg-[radial-gradient(700px_420px_at_84%_30%,rgba(125,190,140,.16),transparent_70%),radial-gradient(520px_320px_at_6%_0%,rgba(217,166,80,.10),transparent_70%),#17110D]">
                 <svg className="pointer-events-none absolute top-1/2 right-[7%] h-[240px] w-[240px] -translate-y-1/2 opacity-70" aria-hidden="true" viewBox="0 0 240 240">
                     <defs>
                         <pattern id="contato-hero-pontos" width="22" height="22" patternUnits="userSpaceOnUse">
