@@ -7,4 +7,9 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  // A biblioteca de mapas carrega um arquivo auxiliar (worker) pelo próprio endereço:
+  // sem o pré-empacotamento do Vite, esse endereço continua certo no desenvolvimento.
+  optimizeDeps: {
+    exclude: ['maplibre-gl'],
+  },
 })
