@@ -12,6 +12,7 @@ import SeletorCultura from '../../components/SeletorCultura/SeletorCultura'
 import { CULTURAS, FONTE_DA_PRODUCAO } from '../../data/culturas'
 import { SOLOS } from '../../data/solos'
 import { useCondicoes } from '../../hooks/useCondicoes'
+import { useRolagemDireta } from '../../hooks/useRolagemDireta'
 import type { Camada } from '../../types/condicoes'
 import { descreverCamada } from '../../utils/descreverCamada'
 
@@ -33,6 +34,9 @@ const PARTES = [
     { id: 'lavouras', nome: 'Lavouras' },
     { id: 'pragas', nome: 'Pragas' },
 ]
+
+/** As partes em que uma girada do mouse leva direto de uma para a outra: abertura, mapa e lavouras. */
+const PARADAS = ['inicio', 'mapa', 'lavouras']
 
 /** O título da abertura, uma linha por vez: em telas largas, cada linha começa mais à direita que a de cima. */
 const TITULO = ['Aviso', 'antes do', 'problema']
@@ -81,6 +85,8 @@ export default function Home() {
         return () => observador.disconnect()
     }, [])
 
+    useRolagemDireta(PARADAS)
+
     const culturaAberta = CULTURAS.find((cultura) => cultura.slug === aberta) ?? null
     const estado = useCondicoes(culturaAberta)
     const condicoes = estado.situacao === 'pronto' ? estado.condicoes : null
@@ -118,7 +124,7 @@ export default function Home() {
                 presa no alto da tela (sticky): ao rolar, as partes seguintes sobem por cima dela. */}
             <section
                 id="inicio"
-                className="parada sticky top-0 h-svh min-h-[44rem] overflow-hidden bg-[#1B1408] text-[#FBF8F1]"
+                className="sticky top-0 h-svh min-h-[44rem] overflow-hidden bg-[#1B1408] text-[#FBF8F1]"
             >
                 {semMovimento ? (
                     <img src={VIDEO.capa} alt="" className="absolute inset-0 size-full object-cover" />
@@ -252,7 +258,7 @@ export default function Home() {
                 id="mapa"
                 ref={secaoDoMapaRef}
                 aria-label="Mapa das lavouras"
-                className="parada relative h-svh min-h-[50rem] overflow-hidden bg-[#01060C] text-[#FBF8F1]"
+                className="relative h-svh min-h-[50rem] overflow-hidden bg-[#01060C] text-[#FBF8F1]"
             >
                 {mapaPerto && (
                     <Suspense fallback={null}>

@@ -135,16 +135,6 @@ html {
   transform: translateY(0);
 }
 
-/* A rolagem para com jeito no começo da abertura e do mapa: uma girada do mouse leva de uma
-   parte à outra, sem parar no meio do caminho ("proximity" só puxa quando já está perto). */
-html {
-  scroll-snap-type: y proximity;
-}
-
-.parada {
-  scroll-snap-align: start;
-}
-
 /* O rótulo de cada parte ("03 · Lavouras") leva um traço que cresce quando a parte aparece. */
 .titulo-de-parte {
   display: flex;
