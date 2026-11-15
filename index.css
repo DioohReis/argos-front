@@ -1,1 +1,213 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
+
+@theme {
+  /* Títulos e números grandes numa fonte geométrica e pesada; rótulos numa fonte estreita, em
+     maiúsculas; textos de leitura numa fonte simples e clara. */
+  --font-display: "Outfit", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-condensed: "Barlow Condensed", "Arial Narrow", ui-sans-serif, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Nuvem atravessando a tela, da esquerda para a direita. */
+  --animate-nuvem: nuvem 80s linear infinite;
+
+  @keyframes nuvem {
+    from {
+      transform: translateX(-120%);
+    }
+    to {
+      transform: translateX(110vw);
+    }
+  }
+}
+
+/* A classe .nuvem usa a animação acima; a duração e o atraso de cada nuvem vêm do componente. */
+.nuvem {
+  animation: var(--animate-nuvem);
+}
+
+/* Quem pediu menos movimento no aparelho vê as nuvens paradas, espalhadas pela tela. */
+@media (prefers-reduced-motion: reduce) {
+  .nuvem {
+    animation: none;
+    transform: translateX(30vw);
+  }
+}
+
+/* A rolagem até uma parte da página (menu lateral, "Ver as pragas") é suave. */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Os pinos das camadas surgem um depois do outro quando a câmera pousa na lavoura: crescem a
+   partir da ponta de baixo, que é o lugar que eles marcam. */
+.pino {
+  animation: brotar 0.55s cubic-bezier(0.2, 1.3, 0.4, 1) both;
+  transform-origin: 50% 100%;
+}
+
+@keyframes brotar {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Entrada de textos e cartões: aparecem subindo um pouco. O atraso de cada um vem do componente. */
+.entrada {
+  animation: subir 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes subir {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Título em linhas: cada linha sobe de trás de uma "janela" (a caixa de fora corta o que passa). */
+.titulo-em-linhas > span > span {
+  animation: erguer 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes erguer {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* As linhas verticais da abertura crescem de cima para baixo. */
+.linha-guia {
+  animation: descer 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transform-origin: 50% 0;
+}
+
+@keyframes descer {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* A rodinha do mouse desce e some, convidando a rolar a página. */
+.rodinha {
+  animation: rolar 1.8s ease-in-out infinite;
+}
+
+@keyframes rolar {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+/* Conteúdo que surge quando entra na tela durante a rolagem (componente Revelar). */
+.revelar {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.revelar.visivel {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* A rolagem para com jeito no começo da abertura e do mapa: uma girada do mouse leva de uma
+   parte à outra, sem parar no meio do caminho ("proximity" só puxa quando já está perto). */
+html {
+  scroll-snap-type: y proximity;
+}
+
+.parada {
+  scroll-snap-align: start;
+}
+
+/* O rótulo de cada parte ("03 · Lavouras") leva um traço que cresce quando a parte aparece. */
+.titulo-de-parte {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.titulo-de-parte::after {
+  content: "";
+  height: 1px;
+  width: 0;
+  background: currentColor;
+  opacity: 0.6;
+  transition: width 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.25s;
+}
+
+.revelar.visivel .titulo-de-parte::after {
+  width: 5rem;
+}
+
+/* Os textos da abertura se afastam conforme a página rola: a animação é comandada pela rolagem
+   (animation-timeline), não pelo relógio. Navegador que ainda não tem esse recurso deixa os
+   textos parados, e a página funciona igual. */
+@supports (animation-timeline: scroll()) {
+  .afasta-ao-rolar {
+    animation: afastar linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 90vh;
+  }
+
+  @keyframes afastar {
+    to {
+      opacity: 0;
+      transform: translateY(-9vh) scale(0.94);
+    }
+  }
+}
+
+/* Quem pediu menos movimento no aparelho vê tudo já no lugar, sem animação. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .afasta-ao-rolar {
+    animation: none;
+  }
+
+  .titulo-de-parte::after {
+    transition: none;
+  }
+
+  .pino,
+  .entrada,
+  .titulo-em-linhas > span > span,
+  .linha-guia,
+  .rodinha {
+    animation: none;
+  }
+
+  .revelar {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
