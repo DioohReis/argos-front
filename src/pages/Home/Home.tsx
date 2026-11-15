@@ -140,6 +140,7 @@ export default function Home() {
                 <div className="mx-auto flex max-w-[1200px] flex-col gap-10 px-7">
                     <h2 data-reveal className="text-center font-titulo text-[clamp(30px,3.6vw,44px)] leading-tight font-extrabold uppercase text-bege">Explore o Argos</h2>
                     <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-5">
+                        <CardExplorar titulo="Solução" descricao="Conheça o problema real, os dados oficiais e a tese completa do Argos." chamada="VER SOLUÇÃO →" para="/solucao" />
                         <CardExplorar titulo="Triagem" descricao="Responda com figuras e monte o perfil da sua roça." chamada="COMEÇAR →" para="/triagem" />
                         <CardExplorar titulo="Hoje" descricao="Os avisos do seu município, com a fonte." chamada="VER AVISOS →" para="/hoje" />
                         <CardExplorar titulo="Guia visual" descricao="Milho e feijão: saudável, praga, seca e excesso de água." chamada="ABRIR O GUIA →" para="/guia/milho" />
