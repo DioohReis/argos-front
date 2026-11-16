@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { CSSProperties } from 'react'
 import { Link } from 'react-router'
+import LogoArgos from '../LogoArgos/LogoArgos'
 
 /** O vídeo da abertura: colheita de soja no Brasil, vista de drone. Uso livre, pela licença do Pexels. */
 const VIDEO = {
@@ -82,14 +83,8 @@ export default function Abertura({ proximaParte }: AberturaProps) {
             <div className="afasta-ao-rolar absolute inset-0">
                 {/* O alto da tela: a marca à esquerda e o lema na terceira coluna. */}
                 <div className="absolute inset-x-0 top-0 flex items-start justify-between px-6 pt-8 md:px-12 md:pt-12">
-                    <p className="entrada flex items-center gap-2.5 font-display text-2xl font-bold tracking-[0.08em] lowercase">
-                        <span aria-hidden="true" className="grid size-6 grid-cols-2 gap-0.5">
-                            <span className="rounded-tl-md bg-[#E6DAC6]" />
-                            <span className="rounded-tr-md bg-[#7DBE8C]" />
-                            <span className="col-span-2 rounded-b-md bg-[#E6DAC6]" />
-                        </span>
-                        Argos
-                    </p>
+                    {/* O logotipo do Argos, o mesmo da barra de navegação e do rodapé. */}
+                    <LogoArgos className="entrada text-[28px] text-bege" />
                     <p
                         style={{ animationDelay: '200ms' }}
                         className="entrada text-right font-condensed text-xl leading-[1.05] font-semibold tracking-[0.04em] uppercase md:absolute md:left-[58%] md:text-left md:text-[2rem]"
