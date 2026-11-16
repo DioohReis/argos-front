@@ -9,6 +9,8 @@ interface SeletorProps {
     rotuloAnterior: string
     rotuloProximo: string
     onPassar: (passo: number) => void
+    /** Em telas largas, alinha tudo à esquerda (o seletor de lavouras fica numa coluna lateral). */
+    aEsquerda?: boolean
     children?: ReactNode
 }
 
@@ -26,10 +28,12 @@ export default function Seletor({
     rotuloAnterior,
     rotuloProximo,
     onPassar,
+    aEsquerda = false,
     children,
 }: SeletorProps) {
+    const alinhamento = aEsquerda ? 'items-center text-center md:items-start md:text-left' : 'items-center text-center'
     return (
-        <div className="flex flex-col items-center text-center text-[#E6DAC6]">
+        <div className={`flex flex-col text-[#E6DAC6] ${alinhamento}`}>
             <div className="flex items-center gap-1">
                 <button type="button" onClick={() => onPassar(-1)} aria-label={rotuloAnterior} className={SETA}>
                     <span aria-hidden="true" className="flex size-7 items-center justify-center rounded-full bg-[#E6DAC6] pb-0.5 text-xl leading-none text-[#17110D]">
@@ -47,7 +51,7 @@ export default function Seletor({
                 </button>
             </div>
             {/* A chave muda com o título: o bloco é montado de novo e a animação de entrada roda outra vez. */}
-            <div key={titulo} className="entrada flex flex-col items-center">
+            <div key={titulo} className={`entrada flex flex-col ${alinhamento}`}>
                 <p className="font-display text-4xl leading-tight font-semibold sm:text-5xl">{titulo}</p>
                 {children}
             </div>

@@ -13,7 +13,7 @@ import { SOLOS } from '../../data/solos'
 import { useCondicoes } from '../../hooks/useCondicoes'
 import { useRolagemDireta } from '../../hooks/useRolagemDireta'
 import type { Camada } from '../../types/condicoes'
-import { descreverCamada } from '../../utils/descreverCamada'
+import { CAMADAS, descreverCamada } from '../../utils/descreverCamada'
 
 // O mapa (e a biblioteca de mapas) chega num arquivo à parte: o texto da página aparece antes.
 const MapaArgos = lazy(() => import('../../components/MapaArgos/MapaArgos'))
@@ -95,15 +95,39 @@ export default function Mapa() {
     const avisarSemImagem = useCallback(() => setSemImagem(true), [])
     const avisarComImagem = useCallback(() => setSemImagem(false), [])
 
-    // A tecla Esc volta ao mapa do Brasil.
+    // O teclado: as setas para os lados trocam de lavoura (ou de camada, com a lavoura aberta),
+    // Enter abre a lavoura em destaque e Esc volta ao mapa do Brasil.
     useEffect(() => {
-        if (!aberta) return
         const aoTeclar = (evento: KeyboardEvent) => {
-            if (evento.key === 'Escape') voltar()
+            // Só vale com o mapa na tela.
+            const secao = secaoDoMapaRef.current
+            if (!secao) return
+            const caixa = secao.getBoundingClientRect()
+            if (caixa.bottom < window.innerHeight * 0.5 || caixa.top > window.innerHeight * 0.5) return
+
+            if (evento.key === 'Escape' && aberta) {
+                voltar()
+                return
+            }
+            const passo = evento.key === 'ArrowRight' ? 1 : evento.key === 'ArrowLeft' ? -1 : 0
+            if (passo !== 0) {
+                evento.preventDefault()
+                if (aberta) {
+                    const indice = CAMADAS.indexOf(camada)
+                    setCamada(CAMADAS[(indice + passo + CAMADAS.length) % CAMADAS.length])
+                } else {
+                    const indice = CULTURAS.findIndex((cultura) => cultura.slug === selecionada)
+                    setSelecionada(CULTURAS[(indice + passo + CULTURAS.length) % CULTURAS.length].slug)
+                }
+                return
+            }
+            // Num botão ou num link, o Enter já tem o serviço dele: apertar o que está em foco.
+            const emBotao = evento.target instanceof HTMLButtonElement || evento.target instanceof HTMLAnchorElement
+            if (evento.key === 'Enter' && !aberta && !emBotao) abrir(selecionada)
         }
         window.addEventListener('keydown', aoTeclar)
         return () => window.removeEventListener('keydown', aoTeclar)
-    }, [aberta, voltar])
+    }, [aberta, camada, selecionada, abrir, voltar])
 
     return (
         <main className="bg-[#17110D] font-sans text-[#17110D]">
@@ -200,8 +224,8 @@ export default function Mapa() {
                             Escolha a lavoura
                         </h2>
                         <p className="mt-3 text-lg leading-snug">
-                            Toque num ponto do mapa ou use as setas. Depois veja o clima, o ar, a umidade e o solo do
-                            lugar.
+                            Clique num ponto do mapa ou use as setas. Arraste o mapa para olhar em volta. Depois
+                            veja o clima, o ar, a umidade e o solo do lugar.
                         </p>
                     </Revelar>
                 )}
@@ -212,9 +236,10 @@ export default function Mapa() {
                     </p>
                 )}
 
-                {/* A base da tela: o painel da lavoura aberta ou o seletor de lavouras. */}
-                <div className="absolute inset-x-0 bottom-0 z-20 px-6 pb-9 md:pb-11">
-                    {culturaAberta ? (
+                {/* A base da tela: com a lavoura aberta, o painel dela no meio; no mapa do Brasil, o seletor
+                    de lavouras, que em telas largas fica na coluna da esquerda, embaixo do título. */}
+                {culturaAberta ? (
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 px-6 pb-9 md:pb-11 [&_a]:pointer-events-auto [&_button]:pointer-events-auto">
                         <PainelLavoura
                             cultura={culturaAberta}
                             camada={camada}
@@ -224,15 +249,17 @@ export default function Mapa() {
                             semImagem={semImagem}
                             onCamada={setCamada}
                         />
-                    ) : (
+                    </div>
+                ) : (
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 px-6 pb-9 md:inset-x-auto md:left-12 md:w-[24rem] md:px-0 md:pb-12 [&_button]:pointer-events-auto">
                         <SeletorCultura
                             culturas={CULTURAS}
                             selecionada={selecionada}
                             onSelecionar={setSelecionada}
                             onAbrir={abrir}
                         />
-                    )}
-                </div>
+                    </div>
+                )}
             </section>
 
             {/* As mesmas seis lavouras em lista: mais fácil de tocar no celular e de ler com leitor de tela. */}

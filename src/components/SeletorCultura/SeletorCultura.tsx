@@ -33,6 +33,7 @@ export default function SeletorCultura({ culturas, selecionada, onSelecionar, on
             rotuloAnterior="Lavoura anterior"
             rotuloProximo="Próxima lavoura"
             onPassar={passar}
+            aEsquerda
         >
             <p className="mt-1 text-xs font-semibold tracking-[0.22em] uppercase opacity-85">
                 {cultura.municipio}, {cultura.uf}
