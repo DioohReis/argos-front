@@ -235,7 +235,9 @@ const escalaDosPinos = (largura: number) => (largura < 768 ? 0.4 : 1)
 
 /** Com a lavoura aberta, o painel ocupa a parte de baixo: o lugar fica no meio do que sobra. */
 const margensDaLavoura = (largura: number) =>
-    largura < 768 ? { top: 150, left: 0, right: 0, bottom: 360 } : { top: 60, left: 0, right: 0, bottom: 300 }
+    // No celular o nome da lavoura e o botão de voltar ocupam o alto: a margem de cima é maior, para
+    // os pinos não baterem neles.
+    largura < 768 ? { top: 250, left: 0, right: 0, bottom: 360 } : { top: 60, left: 0, right: 0, bottom: 300 }
 
 /** Movimento que sai devagar, acelera no meio e chega devagar. */
 const suave = (tempo: number) => (tempo < 0.5 ? 4 * tempo ** 3 : 1 - (-2 * tempo + 2) ** 3 / 2)
@@ -567,7 +569,9 @@ export default function MapaArgos({
                             // Os pinos ficam por cima das nuvens e do escurecido da borda, que são desenhados depois do mapa.
                             className={`pino absolute flex -translate-x-1/2 -translate-y-full flex-col items-center ${ativa ? 'z-[11]' : 'z-10'}`}
                         >
-                            {ativa && cartao}
+                            {/* No celular não há espaço para o cartão entre o nome da lavoura e o painel:
+                                os números ficam só no painel de baixo. */}
+                            {ativa && <div className="hidden md:block">{cartao}</div>}
                             <button
                                 type="button"
                                 aria-pressed={ativa}

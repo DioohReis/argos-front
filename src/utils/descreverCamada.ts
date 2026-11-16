@@ -93,7 +93,7 @@ export function descreverCamada(
             ...vazia('Clima'),
             avaliacao: avaliarChuva(clima.chanceDeChuva),
             frase: `${numero(clima.chanceDeChuva)}% de chance de chuva hoje`,
-            detalhe: `Agora faz ${numero(clima.temperaturaAgora)}°C. Chuva esperada: ${numero(clima.chuvaMm, 1)} mm.`,
+            detalhe: `Agora faz ${numero(clima.temperaturaAgora)}°C (mínima de ${numero(clima.minima)}°C e máxima de ${numero(clima.maxima)}°C). Chuva esperada: ${numero(clima.chuvaMm, 1)} mm.`,
             cartao: [
                 { rotulo: 'Mín.', valor: `${numero(clima.minima)}°C` },
                 { rotulo: 'Máx.', valor: `${numero(clima.maxima)}°C` },
