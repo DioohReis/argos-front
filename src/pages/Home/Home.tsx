@@ -251,8 +251,8 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* As partes seguintes ficam numa folha de cantos arredondados, que sobe por cima da abertura. */}
-            <div className="relative z-10 overflow-hidden rounded-t-[2.5rem] bg-[#FBF8F1] shadow-[0_-30px_70px_rgb(0_0_0/0.55)]">
+            {/* As partes seguintes ficam numa folha que sobe por cima da abertura, com uma sombra na beirada de cima. */}
+            <div className="relative z-10 bg-[#FBF8F1] shadow-[0_-30px_70px_rgb(0_0_0/0.55)]">
             {/* O mapa: o Brasil em imagem de satélite, com as seis lavouras. */}
             <section
                 id="mapa"
@@ -410,7 +410,7 @@ export default function Home() {
             </section>
 
             {/* O catálogo de pragas: como é cada bicho, o estrago que deixa e onde procurar. */}
-            <section id="pragas" className="rounded-t-[2.5rem] bg-[#0F2318] text-[#FBF8F1]">
+            <section id="pragas" className="bg-[#0F2318] text-[#FBF8F1]">
                 <div className="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-24">
                     <Revelar>
                         <p className="titulo-de-parte font-condensed text-lg font-semibold tracking-[0.16em] text-[#F2B705] uppercase">
