@@ -11,10 +11,12 @@ const VIDEO = {
     pagina: 'https://www.pexels.com/video/aerial-view-of-soybean-harvest-in-brazil-32089142/',
 }
 
-/** As páginas do site, para o menu da abertura. */
+/** As páginas do site, para o menu da abertura: as mesmas da barra de navegação, mais o mapa e o guia. */
 const PAGINAS = [
     { nome: 'Mapa', para: '/mapa' },
     { nome: 'Sobre', para: '/sobre' },
+    { nome: 'Solução', para: '/solucao' },
+    { nome: 'Guia', para: '/guia/soja' },
     { nome: 'Integrantes', para: '/integrantes' },
     { nome: 'FAQ', para: '/faq' },
     { nome: 'Contato', para: '/contato' },
@@ -101,7 +103,7 @@ export default function Abertura({ proximaParte }: AberturaProps) {
                     no celular vira uma fileira de links logo abaixo da marca. */}
                 <nav
                     aria-label="Páginas do site"
-                    className="absolute inset-x-6 top-28 flex flex-wrap gap-x-5 gap-y-1 lg:inset-x-auto lg:top-1/2 lg:left-0 lg:-translate-y-1/2 lg:flex-col lg:flex-nowrap lg:gap-4"
+                    className="absolute inset-x-6 top-28 flex flex-wrap gap-x-5 gap-y-1 lg:inset-x-auto lg:top-1/2 lg:left-0 lg:-translate-y-1/2 lg:flex-col lg:flex-nowrap lg:gap-3"
                 >
                     {PAGINAS.map((pagina, ordem) => (
                         <Link
