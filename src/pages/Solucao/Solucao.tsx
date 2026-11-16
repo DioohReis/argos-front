@@ -91,32 +91,40 @@ export default function Solucao() {
 
   const cenario = CENARIOS[cenarioAtivo];
 
+
   const falarAlerta = (texto: string) => {
+    // Verificação de suporte do navegador
     if (!("speechSynthesis" in window)) {
       alert("Seu navegador não suporta sintetizador de voz nativo.");
       return;
     }
+    // Interrupção imediata de áudio prévio
     window.speechSynthesis.cancel();
+    // Comportamento de Toggle: se já estava lendo, para a leitura
     if (estaOuvindo) {
       setEstaOuvindo(false);
       return;
     }
+    //Instanciação e parametrização da voz
     const utter = new SpeechSynthesisUtterance(texto);
-    utter.lang = "pt-BR";
-    utter.rate = 0.95;
+    utter.lang = "pt-BR"; // Define o idioma para português brasileiro
+    utter.rate = 0.95; // Cadência levemente reduzida (95%) para maior clareza
+
+    // Tratamento de ciclo de vida (eventos assíncronos)
     utter.onend = () => setEstaOuvindo(false);
     utter.onerror = () => setEstaOuvindo(false);
+    // Atualização do estado e disparo da reprodução
     setEstaOuvindo(true);
     window.speechSynthesis.speak(utter);
   };
 
   return (
-    <main className="w-full overflow-hidden bg-fundo font-corpo text-lg leading-relaxed text-bege selection:bg-salvia selection:text-fundo">
+    <main className="w-full overflow-hidden font-corpo text-lg leading-relaxed text-bege selection:bg-salvia selection:text-fundo [background:radial-gradient(700px_420px_at_82%_0%,rgba(125,190,140,.16),transparent_70%),radial-gradient(520px_320px_at_8%_0%,rgba(217,166,80,.10),transparent_70%),linear-gradient(180deg,var(--color-card)_0%,var(--color-fundo)_32%,var(--color-fundo)_100%)]">
       <ScrollReveal />
       <Navbar />
 
       {/* Hero*/}
-      <section className="relative overflow-hidden pt-8 pb-20 md:pt-14 md:pb-32">
+      <section className="relative overflow-hidden bg-transparent pt-8 pb-20 md:pt-14 md:pb-32">
 
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-25">
           <svg viewBox="0 0 1440 900" preserveAspectRatio="none" className="h-full w-full">
@@ -128,12 +136,6 @@ export default function Solucao() {
             </g>
           </svg>
         </div>
-
-        {/* Gradientes atmosféricos */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[550px] w-[950px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(125,190,140,0.15),rgba(217,166,80,0.08)_50%,transparent_75%)] blur-3xl"
-        />
 
         <div className="relative mx-auto max-w-[1240px] px-6 lg:px-8">
           <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
@@ -164,7 +166,7 @@ export default function Solucao() {
                 </div>
               </div>
 
-              {/* Botões de Ação */}
+              {/* Botões de acao */}
               <div className="mt-2 flex flex-wrap items-center gap-4">
                 <a
                   href="#demonstracao"
@@ -184,10 +186,7 @@ export default function Solucao() {
         </div>
       </section>
 
-      {/* =========================================================
-          2. O PROBLEMA COLOCADO: A REALIDADE CRUCIAL DO CAMPO
-          (Sem caixas convencionais: layout tipo dossiê cartográfico)
-      ========================================================= */}
+      {/* O PROBLEMA COLOCADO*/}
       <section id="problema" className="relative bg-[#1A130E] py-24 md:py-32 border-t border-b border-linha/70">
         <div className="mx-auto max-w-[1240px] px-6 lg:px-8">
           <div data-reveal className="max-w-[840px]">
@@ -200,14 +199,14 @@ export default function Solucao() {
             </p>
           </div>
 
-          {/* Dossiê em mosaico assimétrico com dados empíricos certificados pelo documento */}
+          {/* dados com fontes */}
           <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Bloco 01 - Assistência Técnica */}
+            {/* Assistência Técnica */}
             <div data-reveal className="relative rounded-3xl border border-linha bg-card/80 p-7 flex flex-col justify-between group hover:border-salvia/60 transition-colors">
               <div>
-                <div className="flex items-baseline justify-between">
-                  <span className="font-titulo text-5xl font-extrabold text-salvia">77%</span>
-                  <span className="text-xs font-mono text-texto-2">Censo Agro / IBGE</span>
+                <div>
+                  <span className="font-titulo text-5xl font-extrabold text-salvia leading-none">77%</span>
+                  <span className="mt-2 block text-xs font-mono text-texto-2">Censo Agro / IBGE</span>
                 </div>
                 <h3 className="font-titulo text-xl font-bold uppercase text-bege mt-4">
                   Agricultura Familiar Abandonada
@@ -221,12 +220,12 @@ export default function Solucao() {
               </div>
             </div>
 
-            {/* Bloco 02 - Barreira de Escolaridade e Linguagem */}
+            {/* Barreira de Escolaridade e Linguagem */}
             <div data-reveal className="relative rounded-3xl border border-linha bg-card/80 p-7 flex flex-col justify-between group hover:border-ambar/60 transition-colors">
               <div>
-                <div className="flex items-baseline justify-between">
-                  <span className="font-titulo text-5xl font-extrabold text-ambar">23%</span>
-                  <span className="text-xs font-mono text-texto-2">Não Alfabetizados</span>
+                <div>
+                  <span className="font-titulo text-5xl font-extrabold text-ambar leading-none">23%</span>
+                  <span className="mt-2 block text-xs font-mono text-texto-2">Não Alfabetizados</span>
                 </div>
                 <h3 className="font-titulo text-xl font-bold uppercase text-bege mt-4">
                   O Abismo do Letramento
@@ -240,12 +239,12 @@ export default function Solucao() {
               </div>
             </div>
 
-            {/* Bloco 03 - Conectividade Rascunhada */}
+            {/* Conectividade Rascunhada */}
             <div data-reveal className="relative rounded-3xl border border-linha bg-card/80 p-7 flex flex-col justify-between group hover:border-salvia/60 transition-colors">
               <div>
-                <div className="flex items-baseline justify-between">
-                  <span className="font-titulo text-5xl font-extrabold text-bege">26%</span>
-                  <span className="text-xs font-mono text-texto-2">Sinal Dividido</span>
+                <div>
+                  <span className="font-titulo text-5xl font-extrabold text-bege leading-none">26%</span>
+                  <span className="mt-2 block text-xs font-mono text-texto-2">Sinal Dividido</span>
                 </div>
                 <h3 className="font-titulo text-xl font-bold uppercase text-bege mt-4">
                   Conexão Precária no Pasto
@@ -259,12 +258,12 @@ export default function Solucao() {
               </div>
             </div>
 
-            {/* Bloco 04 - O Golpe do Clima Extremo */}
+            {/* O Golpe do Clima Extremo */}
             <div data-reveal className="relative rounded-3xl border border-linha bg-card/80 p-7 flex flex-col justify-between group hover:border-red-400/60 transition-colors">
               <div>
-                <div className="flex items-baseline justify-between">
-                  <span className="font-titulo text-4xl sm:text-5xl font-extrabold text-nivel-4">R$ 5,6 bi</span>
-                  <span className="text-xs font-mono text-texto-2">Prejuízo Agro</span>
+                <div>
+                  <span className="font-titulo text-4xl sm:text-[44px] font-extrabold text-nivel-4 leading-none whitespace-nowrap">R$ 5,6 bi</span>
+                  <span className="mt-2 block text-xs font-mono text-texto-2">Prejuízo Agro</span>
                 </div>
                 <h3 className="font-titulo text-xl font-bold uppercase text-bege mt-4">
                   Desastres do El Niño 2026
@@ -303,10 +302,7 @@ export default function Solucao() {
         </div>
       </section>
 
-      {/* =========================================================
-          3. A SOLUÇÃO ARGOS: COMO ELA SE DIFERENCIA DO MERCADO
-          (Por que não é apenas "mais um chatbot"?)
-      ========================================================= */}
+      {/* A SOLUÇÃO ARGOS: COMO ELA SE DIFERENCIA DO MERCADO */}
       <section className="relative py-24 md:py-32">
         <div className="mx-auto max-w-[1240px] px-6 lg:px-8">
           <div data-reveal className="text-center max-w-[800px] mx-auto">
@@ -319,9 +315,9 @@ export default function Solucao() {
             </p>
           </div>
 
-          {/* Matriz Comparativa Estilizada em 3 Colunas Assimétricas */}
+          {/* Matriz Comparativa*/}
           <div className="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
-            {/* Coluna 1: Chatbots Reativos */}
+            {/* Chatbots Reativos */}
             <div data-reveal className="rounded-3xl border border-linha bg-card/60 p-8 flex flex-col justify-between">
               <div>
                 <div className="inline-block rounded-full bg-red-950/40 border border-red-700/40 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-red-300">
@@ -351,7 +347,7 @@ export default function Solucao() {
               </div>
             </div>
 
-            {/* Coluna 2: Diagnóstico por Imagem Tardia */}
+            {/* Diagnóstico por Imagem Tardia */}
             <div data-reveal className="rounded-3xl border border-linha bg-card/60 p-8 flex flex-col justify-between">
               <div>
                 <div className="inline-block rounded-full bg-amber-950/40 border border-amber-700/40 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-amber-300">
@@ -381,7 +377,7 @@ export default function Solucao() {
               </div>
             </div>
 
-            {/* Coluna 3: O Modelo Argos (Destaque Central) */}
+            {/* O Argos (Destaque Central) */}
             <div data-reveal className="relative rounded-3xl border-2 border-salvia bg-gradient-to-b from-[#1C2C22] to-card p-8 flex flex-col justify-between shadow-[0_20px_60px_rgba(125,190,140,0.18)]">
               <div className="absolute -top-3.5 right-6 rounded-full bg-salvia px-3 py-1 font-titulo text-[11px] font-bold uppercase tracking-wider text-fundo">
                 DIFERENCIAL ARGOS
@@ -421,10 +417,7 @@ export default function Solucao() {
         </div>
       </section>
 
-      {/* =========================================================
-          4. O PÚBLICO-ALVO E AS PERSONAS DA VIDA REAL
-          (Mostrando quem o sistema protege e como funciona na prática)
-      ========================================================= */}
+      {/* PÚBLICO-ALVO E AS PERSONAS*/}
       <section className="relative bg-card/60 py-24 md:py-32 border-t border-b border-linha/80">
         <div className="mx-auto max-w-[1240px] px-6 lg:px-8">
           <div data-reveal className="max-w-[760px]">
@@ -513,10 +506,7 @@ export default function Solucao() {
         </div>
       </section>
 
-      {/* =========================================================
-          5. SIMULADOR INTERATIVO: EXPERIMENTE O ARGOS EM TEMPO REAL
-          (Permite à banca e ao usuário ver os dados oficiais e o áudio reagindo)
-      ========================================================= */}
+      {/* SIMULADOR INTERATIVO */}
       <section id="demonstracao" className="relative py-24 md:py-32">
         <div className="mx-auto max-w-[1240px] px-6 lg:px-8">
           <div data-reveal className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -868,10 +858,7 @@ export default function Solucao() {
         </div>
       </section>
 
-      {/* =========================================================
-          7. MODELO DE NEGÓCIO B2B2C: QUEM PAGA E POR QUÊ
-          (Sustentabilidade financeira e institucional)
-      ========================================================= */}
+      {/* MODELO DE NEGÓCIO B2B2C: QUEM PAGA E POR QUÊ */}
       <section className="relative py-24 md:py-32">
         <div className="mx-auto max-w-[1240px] px-6 lg:px-8">
           <div data-reveal className="max-w-[820px]">
