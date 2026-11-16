@@ -9,6 +9,7 @@ import Contato from '../pages/Contato/Contato'
 import Triagem from '../pages/Triagem/Triagem'
 import Hoje from '../pages/Hoje/Hoje'
 import Guia from '../pages/Guia/Guia'
+import Mapa from '../pages/Mapa/Mapa'
 import Ocorrencias from '../pages/Ocorrencias/Ocorrencias'
 import NotFound from '../pages/NotFound/NotFound'
 
@@ -24,6 +25,7 @@ function AppRoutes() {
             <Route path="/triagem" element={<Triagem />} />
             <Route path="/hoje" element={<Hoje />} />
             <Route path="/guia/:cultura" element={<Guia />} />
+            <Route path="/mapa" element={<Mapa />} />
             <Route path="/ocorrencias" element={<Ocorrencias />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
