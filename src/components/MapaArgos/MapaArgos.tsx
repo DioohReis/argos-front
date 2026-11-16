@@ -58,7 +58,7 @@ const MUNDO: [number, number][] = [
     [-180, 85],
     [-180, -85],
 ]
-const ESPACO = '#01060C'
+const ESPACO = '#17110D'
 
 const ESTILO: StyleSpecification = {
     version: 8,
@@ -116,7 +116,7 @@ const ESTILO: StyleSpecification = {
             type: 'hillshade',
             source: 'sombra',
             minzoom: 8,
-            paint: { 'hillshade-exaggeration': 0.4, 'hillshade-shadow-color': '#03110A' },
+            paint: { 'hillshade-exaggeration': 0.4, 'hillshade-shadow-color': '#17110D' },
         },
         {
             id: 'vizinhos',
@@ -132,7 +132,7 @@ const ESTILO: StyleSpecification = {
             type: 'line',
             source: 'brasil',
             paint: {
-                'line-color': '#FBF8F1',
+                'line-color': '#E6DAC6',
                 'line-width': 1.3,
                 'line-opacity': ['interpolate', ['linear'], ['zoom'], 4.5, 0.8, 8, 0],
             },
@@ -533,21 +533,21 @@ export default function MapaArgos({
                                     }`}
                                 >
                                     <span
-                                        className={`flex size-11 items-center justify-center rounded-full shadow-lg transition-transform duration-300 group-hover:scale-110 group-focus-visible:ring-4 group-focus-visible:ring-[#F2B705] ${
-                                            ativa ? 'scale-110 bg-[#F2B705] text-[#1E1E1E]' : 'bg-[#FBF8F1] text-[#1F3D2B]'
+                                        className={`flex size-11 items-center justify-center rounded-full shadow-lg transition-transform duration-300 group-hover:scale-110 group-focus-visible:ring-4 group-focus-visible:ring-[#7DBE8C] ${
+                                            ativa ? 'scale-110 bg-[#7DBE8C] text-[#17110D]' : 'bg-[#E6DAC6] text-[#2E5A43]'
                                         }`}
                                     >
                                         <IconeCultura slug={cultura.slug} className="size-6" />
                                     </span>
                                     <span
                                         aria-hidden="true"
-                                        className={`-mt-1.5 size-3 rotate-45 ${ativa ? 'bg-[#F2B705]' : 'bg-[#FBF8F1]'}`}
+                                        className={`-mt-1.5 size-3 rotate-45 ${ativa ? 'bg-[#7DBE8C]' : 'bg-[#E6DAC6]'}`}
                                     />
                                 </span>
                                 <span
                                     aria-hidden="true"
                                     className={`mt-1.5 size-2 rounded-full ${
-                                        ativa ? 'bg-[#F2B705] motion-safe:animate-ping' : 'bg-[#FBF8F1]'
+                                        ativa ? 'bg-[#7DBE8C] motion-safe:animate-ping' : 'bg-[#E6DAC6]'
                                     }`}
                                 />
                             </button>
@@ -581,7 +581,7 @@ export default function MapaArgos({
                                 className="group flex cursor-pointer flex-col items-center focus-visible:outline-none"
                             >
                                 <span
-                                    className={`flex size-14 items-center justify-center rounded-full bg-white text-[#3D463F] shadow-[0_6px_18px_rgb(0_0_0/0.35)] transition-transform duration-300 group-hover:scale-110 group-focus-visible:ring-4 group-focus-visible:ring-[#F2B705] ${
+                                    className={`flex size-14 items-center justify-center rounded-full bg-white text-[#17110D] shadow-[0_6px_18px_rgb(0_0_0/0.35)] transition-transform duration-300 group-hover:scale-110 group-focus-visible:ring-4 group-focus-visible:ring-[#7DBE8C] ${
                                         ativa ? 'scale-110' : ''
                                     }`}
                                 >

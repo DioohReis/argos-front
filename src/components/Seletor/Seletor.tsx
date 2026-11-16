@@ -13,7 +13,7 @@ interface SeletorProps {
 }
 
 const SETA =
-    'flex size-12 shrink-0 cursor-pointer items-center justify-center rounded-full transition-transform hover:scale-110 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#F2B705]'
+    'flex size-12 shrink-0 cursor-pointer items-center justify-center rounded-full transition-transform hover:scale-110 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#7DBE8C]'
 
 /**
  * Seletor com setas: mostra "2/4", o título da opção atual e, embaixo, o que vier dentro dele.
@@ -29,10 +29,10 @@ export default function Seletor({
     children,
 }: SeletorProps) {
     return (
-        <div className="flex flex-col items-center text-center text-[#FBF8F1]">
+        <div className="flex flex-col items-center text-center text-[#E6DAC6]">
             <div className="flex items-center gap-1">
                 <button type="button" onClick={() => onPassar(-1)} aria-label={rotuloAnterior} className={SETA}>
-                    <span aria-hidden="true" className="flex size-7 items-center justify-center rounded-full bg-[#FBF8F1] pb-0.5 text-xl leading-none text-[#14251A]">
+                    <span aria-hidden="true" className="flex size-7 items-center justify-center rounded-full bg-[#E6DAC6] pb-0.5 text-xl leading-none text-[#17110D]">
                         ‹
                     </span>
                 </button>
@@ -41,7 +41,7 @@ export default function Seletor({
                     <span className="text-3xl opacity-60">/{total}</span>
                 </p>
                 <button type="button" onClick={() => onPassar(1)} aria-label={rotuloProximo} className={SETA}>
-                    <span aria-hidden="true" className="flex size-7 items-center justify-center rounded-full bg-[#FBF8F1] pb-0.5 text-xl leading-none text-[#14251A]">
+                    <span aria-hidden="true" className="flex size-7 items-center justify-center rounded-full bg-[#E6DAC6] pb-0.5 text-xl leading-none text-[#17110D]">
                         ›
                     </span>
                 </button>

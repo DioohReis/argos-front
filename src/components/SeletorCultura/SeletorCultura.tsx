@@ -43,7 +43,7 @@ export default function SeletorCultura({ culturas, selecionada, onSelecionar, on
             <button
                 type="button"
                 onClick={() => onAbrir(cultura.slug)}
-                className="mt-3 flex min-h-12 cursor-pointer items-center rounded-full bg-[#F2B705] px-7 text-lg font-bold text-[#1E1E1E] transition-opacity hover:opacity-90 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#FBF8F1]"
+                className="mt-3 flex min-h-12 cursor-pointer items-center rounded-full bg-[#7DBE8C] px-7 text-lg font-bold text-[#17110D] transition-opacity hover:opacity-90 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#E6DAC6]"
             >
                 Ver a lavoura
             </button>
