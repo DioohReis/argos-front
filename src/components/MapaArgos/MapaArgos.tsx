@@ -236,11 +236,13 @@ const metrosPorPixel = (latitude: number, zoom: number) =>
 /** No celular a roda de pinos encolhe, para caber na tela. */
 const escalaDosPinos = (largura: number) => (largura < 768 ? 0.4 : 1)
 
-/** Com a lavoura aberta, o painel ocupa a parte de baixo: o lugar fica no meio do que sobra. */
-const margensDaLavoura = (largura: number) =>
-    // No celular o nome da lavoura e o botão de voltar ocupam o alto: a margem de cima é maior, para
-    // os pinos não baterem neles.
-    largura < 768 ? { top: 250, left: 0, right: 0, bottom: 360 } : { top: 130, left: 0, right: 0, bottom: 300 }
+/**
+ * Com a lavoura aberta, o painel ocupa a parte de baixo e o nome dela o alto: o lugar fica um pouco
+ * acima do meio da tela. É um deslocamento em pixels (x, y) que vale só para aquele movimento da
+ * câmera. Não se usa `padding` aqui de propósito: a margem ficaria guardada no mapa e, na volta,
+ * se somaria às margens do Brasil, deixando o país pequeno.
+ */
+const deslocamentoDaLavoura = (largura: number): [number, number] => (largura < 768 ? [0, -55] : [0, -85])
 
 /** Movimento que sai devagar, acelera no meio e chega devagar. */
 const suave = (tempo: number) => (tempo < 0.5 ? 4 * tempo ** 3 : 1 - (-2 * tempo + 2) ** 3 / 2)
@@ -406,6 +408,7 @@ export default function MapaArgos({
                 if (camadaRef.current === destino) return
                 mapa.easeTo({
                     ...CAMERAS[camadaRef.current],
+                    offset: deslocamentoDaLavoura(mapa.getContainer().clientWidth),
                     duration: parado ? 0 : SEGUNDOS_ENTRE_CAMADAS * 1000,
                     easing: suave,
                     essential: true,
@@ -417,7 +420,7 @@ export default function MapaArgos({
             mapa.flyTo({
                 center: [aberta.longitude, aberta.latitude],
                 ...CAMERAS[destino],
-                padding: margensDaLavoura(mapa.getContainer().clientWidth),
+                offset: deslocamentoDaLavoura(mapa.getContainer().clientWidth),
                 duration: parado ? 0 : SEGUNDOS_DO_VOO * 1000,
                 curve: 1.25,
                 essential: true,
@@ -463,6 +466,7 @@ export default function MapaArgos({
         mapa.easeTo({
             center: [aberta.longitude, aberta.latitude],
             ...CAMERAS[camada],
+            offset: deslocamentoDaLavoura(mapa.getContainer().clientWidth),
             duration: semMovimento() ? 0 : SEGUNDOS_ENTRE_CAMADAS * 1000,
             easing: suave,
             essential: true,
@@ -493,6 +497,7 @@ export default function MapaArgos({
             mapa.easeTo({
                 center: [aberta.longitude, aberta.latitude],
                 ...CAMERAS[camada],
+                offset: deslocamentoDaLavoura(mapa.getContainer().clientWidth),
                 duration: duracao,
                 easing: suave,
                 essential: true,
