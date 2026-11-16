@@ -3,7 +3,9 @@ import { Link } from "react-router";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import ScrollReveal from "../../components/ScrollReveal/ScrollReveal";
-import BadgeAlerta, { type NivelAlerta } from "../../components/BadgeAlerta/BadgeAlerta";
+import CardDiagnostico from "../../components/CardDiagnostico/CardDiagnostico";
+import CardPersona from "../../components/CardPersona/CardPersona";
+import SimuladorCenarios from "../../components/SimuladorCenarios/SimuladorCenarios";
 
 /*
   Solução !!
@@ -12,111 +14,8 @@ import BadgeAlerta, { type NivelAlerta } from "../../components/BadgeAlerta/Badg
   e evidências oficiais (IBGE, CNM, INMET, OMM, OCB).
 */
 
-type CenárioSimulado = "cida" | "valdir";
-
-interface DetalhesCenario {
-  id: CenárioSimulado;
-  produtor: string;
-  idade: number;
-  localidade: string;
-  culturas: string[];
-  area: string;
-  condicaoAcesso: string;
-  desafioClima: string;
-  alertaNivel: NivelAlerta;
-  alertaTitulo: string;
-  alertaMensagem: string;
-  audioTexto: string;
-  fonteOficial: string;
-  acaoRecomendada: string;
-  previsaoIA: {
-    rendimentoEstimado: string;
-    riscoQuebra: string;
-    probabilidade: string;
-  };
-  impactoEvitado: string;
-}
-
-const CENARIOS: Record<CenárioSimulado, DetalhesCenario> = {
-  cida: {
-    id: "cida",
-    produtor: "Dona Cida",
-    idade: 58,
-    localidade: "Petrolina / PE (Sertão do São Francisco)",
-    culturas: ["Feijão-caupi", "Milho de sequeiro", "Mandioca"],
-    area: "3,0 hectares",
-    condicaoAcesso: "Letramento restrito (prefere áudio); celular compartilhado com sinal 3G fraco; sem assistência técnica prévia.",
-    desafioClima: "Estiagem severa e ondas de calor aceleradas pelo El Niño de 2026, com escassez de água na cisterna.",
-    alertaNivel: 3,
-    alertaTitulo: "Perigo de Seca e Calor Extremo",
-    alertaMensagem: "Sem previsão de chuva nos próximos 12 dias. Temperaturas acima de 36°C com baixa umidade do solo.",
-    audioTexto: "Atenção Dona Cida. Perigo de seca em Petrolina. Não semeie milho nesta semana. Guarde a água da cisterna e cubra o solo com palha para reter a umidade.",
-    fonteOficial: "INMET / CEMADEN (Monitor de Secas)",
-    acaoRecomendada: "Suspender semeadura de sequeiro imediata, priorizar retenção de água em mulching/cobertura vegetal e vedar reservatórios comunitários.",
-    previsaoIA: {
-      rendimentoEstimado: "680 kg/ha (redução projetada de 42%)",
-      riscoQuebra: "ALTO RISCO",
-      probabilidade: "78% de chance de quebra se plantado agora",
-    },
-    impactoEvitado: "Economia de até R$ 4.200 em sementes e insumos que seriam calcinados pelo solo quente sem germinação.",
-  },
-  valdir: {
-    id: "valdir",
-    produtor: "Seu Valdir",
-    idade: 46,
-    localidade: "Bento Gonçalves / RS (Serra Gaúcha)",
-    culturas: ["Milho", "Uva para cooperativa"],
-    area: "18,0 hectares",
-    condicaoAcesso: "Lê bem, mas com rotina diária densa no campo; internet oscilante nos vales da serra.",
-    desafioClima: "Excesso de precipitação torrencial e alta umidade relativa contínua promovida pelo padrão El Niño no Sul.",
-    alertaNivel: 2,
-    alertaTitulo: "Atenção: Chuva Torrencial e Risco de Míldio",
-    alertaMensagem: "Acumulado de 140 mm projetado para 48h. Risco alto de encharcamento e desenvolvimento fúngico foliar.",
-    audioTexto: "Atenção Seu Valdir. Chuvas fortes nos próximos dois dias na Serra Gaúcha. Drene as linhas baixas da lavoura e aplique caldas de proteção antes do temporal.",
-    fonteOficial: "Defesa Civil / CEMADEN / Embrapa Uva e Vinho",
-    acaoRecomendada: "Desobstruir drenos de escoamento rápido na encosta e antecipar aplicação de fungicida protetor de contato antes da lâmina d'água.",
-    previsaoIA: {
-      rendimentoEstimado: "4.850 kg/ha no milho (dentro da média se drenado)",
-      riscoQuebra: "MÉDIO RISCO FÚNGICO",
-      probabilidade: "62% de incidência fúngica sem manejo preventivo",
-    },
-    impactoEvitado: "Preservação de até 35% dos cachos de uva que poderiam apodrecer na videira antes da maturação.",
-  },
-};
-
 export default function Solucao() {
-  const [cenarioAtivo, setCenarioAtivo] = useState<CenárioSimulado>("cida");
-  const [estaOuvindo, setEstaOuvindo] = useState(false);
   const [etapaFluxoAtiva, setEtapaFluxoAtiva] = useState<number>(1);
-
-  const cenario = CENARIOS[cenarioAtivo];
-
-
-  const falarAlerta = (texto: string) => {
-    // Verificação de suporte do navegador
-    if (!("speechSynthesis" in window)) {
-      alert("Seu navegador não suporta sintetizador de voz nativo.");
-      return;
-    }
-    // Interrupção imediata de áudio prévio
-    window.speechSynthesis.cancel();
-    // Comportamento de Toggle: se já estava lendo, para a leitura
-    if (estaOuvindo) {
-      setEstaOuvindo(false);
-      return;
-    }
-    //Instanciação e parametrização da voz
-    const utter = new SpeechSynthesisUtterance(texto);
-    utter.lang = "pt-BR"; // Define o idioma para português brasileiro
-    utter.rate = 0.95; // Cadência levemente reduzida (95%) para maior clareza
-
-    // Tratamento de ciclo de vida (eventos assíncronos)
-    utter.onend = () => setEstaOuvindo(false);
-    utter.onerror = () => setEstaOuvindo(false);
-    // Atualização do estado e disparo da reprodução
-    setEstaOuvindo(true);
-    window.speechSynthesis.speak(utter);
-  };
 
   return (
     <main className="w-full overflow-hidden font-corpo text-lg leading-relaxed text-bege selection:bg-salvia selection:text-fundo [background:radial-gradient(700px_420px_at_82%_0%,rgba(125,190,140,.16),transparent_70%),radial-gradient(520px_320px_at_8%_0%,rgba(217,166,80,.10),transparent_70%),linear-gradient(180deg,var(--color-card)_0%,var(--color-fundo)_32%,var(--color-fundo)_100%)]">
@@ -201,81 +100,62 @@ export default function Solucao() {
 
           {/* dados com fontes */}
           <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Assistência Técnica */}
-            <div data-reveal className="relative rounded-3xl border border-linha bg-card/80 p-7 flex flex-col justify-between group hover:border-salvia/60 transition-colors">
-              <div>
-                <div>
-                  <span className="font-titulo text-5xl font-extrabold text-salvia leading-none">77%</span>
-                  <span className="mt-2 block text-xs font-mono text-texto-2">Censo Agro / IBGE</span>
-                </div>
-                <h3 className="font-titulo text-xl font-bold uppercase text-bege mt-4">
-                  Agricultura Familiar Abandonada
-                </h3>
-                <p className="mt-3 text-sm text-texto-2 leading-relaxed">
+            <CardDiagnostico
+              valor="77%"
+              subtitulo="Censo Agro / IBGE"
+              titulo="Agricultura Familiar Abandonada"
+              corValor="salvia"
+              corHover="salvia"
+              descricao={
+                <>
                   77% de todos os estabelecimentos rurais do Brasil são de base familiar (3,89 milhões de propriedades). No entanto, <strong className="text-bege">apenas cerca de 20% tinham acesso a assistência técnica contínua (ATER)</strong>. Os outros 80% tomam decisões cruciais de plantio e colheita inteiramente desamparados.
-                </p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-linha/50 text-[11px] font-mono text-texto-2">
-                Fonte: IBGE Censo Agropecuário 2017 [F1] / ENAP PNATER [F2]
-              </div>
-            </div>
+                </>
+              }
+              fonte="Fonte: IBGE Censo Agropecuário 2017 [F1] / ENAP PNATER [F2]"
+            />
 
-            {/* Barreira de Escolaridade e Linguagem */}
-            <div data-reveal className="relative rounded-3xl border border-linha bg-card/80 p-7 flex flex-col justify-between group hover:border-ambar/60 transition-colors">
-              <div>
-                <div>
-                  <span className="font-titulo text-5xl font-extrabold text-ambar leading-none">23%</span>
-                  <span className="mt-2 block text-xs font-mono text-texto-2">Não Alfabetizados</span>
-                </div>
-                <h3 className="font-titulo text-xl font-bold uppercase text-bege mt-4">
-                  O Abismo do Letramento
-                </h3>
-                <p className="mt-3 text-sm text-texto-2 leading-relaxed">
+            <CardDiagnostico
+              valor="23%"
+              subtitulo="Não Alfabetizados"
+              titulo="O Abismo do Letramento"
+              corValor="ambar"
+              corHover="ambar"
+              descricao={
+                <>
                   23% dos produtores rurais declararam não saber ler e escrever, e <strong className="text-bege">79,1% não concluíram o ensino fundamental</strong>. Portais oficiais como INMET e CEMADEN emitem relatórios em jargões técnicos herméticos (ex.: "isietas", "mm acumulado em 72h", "estresse hídrico") que ninguém na lavoura compreende.
-                </p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-linha/50 text-[11px] font-mono text-texto-2">
-                Fonte: IBGE Censo Agropecuário 2017 (Infográfico de Escolaridade) [F4]
-              </div>
-            </div>
+                </>
+              }
+              fonte="Fonte: IBGE Censo Agropecuário 2017 (Infográfico de Escolaridade) [F4]"
+            />
 
-            {/* Conectividade Rascunhada */}
-            <div data-reveal className="relative rounded-3xl border border-linha bg-card/80 p-7 flex flex-col justify-between group hover:border-salvia/60 transition-colors">
-              <div>
-                <div>
-                  <span className="font-titulo text-5xl font-extrabold text-bege leading-none">26%</span>
-                  <span className="mt-2 block text-xs font-mono text-texto-2">Sinal Dividido</span>
-                </div>
-                <h3 className="font-titulo text-xl font-bold uppercase text-bege mt-4">
-                  Conexão Precária no Pasto
-                </h3>
-                <p className="mt-3 text-sm text-texto-2 leading-relaxed">
+            <CardDiagnostico
+              valor="26%"
+              subtitulo="Sinal Dividido"
+              titulo="Conexão Precária no Pasto"
+              corValor="bege"
+              corHover="salvia"
+              descricao={
+                <>
                   Embora 83% dos moradores do campo usem a internet em algum momento, <strong className="text-bege">26% dos domicílios rurais conectados dividem a senha do Wi-Fi com o vizinho</strong>. No meio do roçado, o sinal 3G oscila ou desaparece por completo, inviabilizando aplicações web comuns que exigem internet rápida e contínua.
-                </p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-linha/50 text-[11px] font-mono text-texto-2">
-                Fonte: Teletime PNAD TIC 2025 [F7] / Cetic.br TIC Domicílios 2025 [F9]
-              </div>
-            </div>
+                </>
+              }
+              fonte="Fonte: Teletime PNAD TIC 2025 [F7] / Cetic.br TIC Domicílios 2025 [F9]"
+            />
 
-            {/* O Golpe do Clima Extremo */}
-            <div data-reveal className="relative rounded-3xl border border-linha bg-card/80 p-7 flex flex-col justify-between group hover:border-red-400/60 transition-colors">
-              <div>
-                <div>
-                  <span className="font-titulo text-4xl sm:text-[44px] font-extrabold text-nivel-4 leading-none whitespace-nowrap">R$ 5,6 bi</span>
-                  <span className="mt-2 block text-xs font-mono text-texto-2">Prejuízo Agro</span>
-                </div>
-                <h3 className="font-titulo text-xl font-bold uppercase text-bege mt-4">
-                  Desastres do El Niño 2026
-                </h3>
-                <p className="mt-3 text-sm text-texto-2 leading-relaxed">
+            <CardDiagnostico
+              valor="R$ 5,6 bi"
+              subtitulo="Prejuízo Agro"
+              titulo="Desastres do El Niño 2026"
+              corValor="nivel-4"
+              corHover="red"
+              valorClassName="text-4xl sm:text-[44px] whitespace-nowrap"
+              descricao={
+                <>
                   Apenas no terceiro trimestre de 2026 (julho a setembro), desastres climáticos causaram <strong className="text-bege">R$ 12,6 bilhões em danos no Brasil</strong>. A agricultura liderou os prejuízos com mais de R$ 5,6 bi perdidos. O El Niño, com aquecimento do Pacífico e pico previsto até o fim do ano, castiga o Nordeste com seca extrema e o Sul com temporais.
-                </p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-linha/50 text-[11px] font-mono text-texto-2">
-                Fonte: CNM Boletim El Niño 2026/2027 [F14] / OMM & NOAA [F12][F13]
-              </div>
-            </div>
+                </>
+              }
+              fonte="Fonte: CNM Boletim El Niño 2026/2027 [F14] / OMM & NOAA [F12][F13]"
+            />
           </div>
 
           {/* Citação em destaque editorial com borda orgânica */}
@@ -431,257 +311,88 @@ export default function Solucao() {
           </div>
 
           <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Persona 1: Dona Cida */}
-            <div data-reveal className="rounded-3xl border border-linha bg-fundo p-7 flex flex-col justify-between relative overflow-hidden">
-              <div className="absolute top-0 right-0 h-32 w-32 bg-amber-500/5 rounded-full blur-xl pointer-events-none" />
-              <div>
-                <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-2xl bg-ambar/20 border border-ambar/40 flex items-center justify-center font-titulo text-xl font-bold text-ambar">
-                    DC
-                  </div>
-                  <div>
-                    <h3 className="font-titulo text-xl font-bold uppercase text-bege">Dona Cida, 58 anos</h3>
-                    <p className="text-xs text-texto-2">Petrolina / PE · 3 hectares de sequeiro</p>
-                  </div>
-                </div>
-                <div className="mt-6 space-y-3 text-sm text-texto-2">
-                  <p><strong className="text-bege">Culturas:</strong> Feijão, milho e mandioca.</p>
-                  <p><strong className="text-bege">Comportamento:</strong> Lê com dificuldade, recorre a mensagens de voz no celular. Medo constante da perda de água na seca.</p>
-                  <p><strong className="text-bege">Como o Argos atua:</strong> Dá avisos de escassez em voz alta, alerta sobre períodos críticos para não abrir covas e ensina a cobrir o solo.</p>
-                </div>
-              </div>
-              <div className="mt-6 pt-4 border-t border-linha/50 text-xs text-salvia font-semibold">
-                Persona Central da Validação Acadêmica
-              </div>
-            </div>
+            <CardPersona
+              iniciais="DC"
+              nome="Dona Cida, 58 anos"
+              subtitulo="Petrolina / PE · 3 hectares de sequeiro"
+              tema="ambar"
+              destaqueRodape="Persona Central da Validação Acadêmica"
+              topicos={[
+                {
+                  rotulo: "Culturas",
+                  descricao: "Feijão, milho e mandioca.",
+                },
+                {
+                  rotulo: "Comportamento",
+                  descricao:
+                    "Lê com dificuldade, recorre a mensagens de voz no celular. Medo constante da perda de água na seca.",
+                },
+                {
+                  rotulo: "Como o Argos atua",
+                  descricao:
+                    "Dá avisos de escassez em voz alta, alerta sobre períodos críticos para não abrir covas e ensina a cobrir o solo.",
+                },
+              ]}
+            />
 
-            {/* Persona 2: Lucas */}
-            <div data-reveal className="rounded-3xl border border-linha bg-fundo p-7 flex flex-col justify-between relative overflow-hidden">
-              <div className="absolute top-0 right-0 h-32 w-32 bg-salvia/5 rounded-full blur-xl pointer-events-none" />
-              <div>
-                <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-2xl bg-salvia/20 border border-salvia/40 flex items-center justify-center font-titulo text-xl font-bold text-salvia">
-                    L
-                  </div>
-                  <div>
-                    <h3 className="font-titulo text-xl font-bold uppercase text-bege">Lucas, 22 anos</h3>
-                    <p className="text-xs text-texto-2">Filho da Dona Cida · O "Ajudante Digital"</p>
-                  </div>
-                </div>
-                <div className="mt-6 space-y-3 text-sm text-texto-2">
-                  <p><strong className="text-bege">Papel:</strong> Ponte de inclusão geracional na família rural.</p>
-                  <p><strong className="text-bege">Comportamento:</strong> Fluente no smartphone, é quem faz o cadastro e a triagem inicial das glebas da mãe sem atrito.</p>
-                  <p><strong className="text-bege">Como o Argos atua:</strong> Formulário guiado com passos rápidos (10 perguntas), sem exigência de senhas complexas ou burocracia bancária.</p>
-                </div>
-              </div>
-              <div className="mt-6 pt-4 border-t border-linha/50 text-xs text-ambar font-semibold">
-                Facilitador de Adoção Tecnológica
-              </div>
-            </div>
+            <CardPersona
+              iniciais="L"
+              nome="Lucas, 22 anos"
+              subtitulo='Filho da Dona Cida · O "Ajudante Digital"'
+              tema="salvia"
+              destaqueRodape="Facilitador de Adoção Tecnológica"
+              topicos={[
+                {
+                  rotulo: "Papel",
+                  descricao: "Ponte de inclusão geracional na família rural.",
+                },
+                {
+                  rotulo: "Comportamento",
+                  descricao:
+                    "Fluente no smartphone, é quem faz o cadastro e a triagem inicial das glebas da mãe sem atrito.",
+                },
+                {
+                  rotulo: "Como o Argos atua",
+                  descricao:
+                    "Formulário guiado com passos rápidos (10 perguntas), sem exigência de senhas complexas ou burocracia bancária.",
+                },
+              ]}
+            />
 
-            {/* Persona 3: Seu Valdir */}
-            <div data-reveal className="rounded-3xl border border-linha bg-fundo p-7 flex flex-col justify-between relative overflow-hidden">
-              <div className="absolute top-0 right-0 h-32 w-32 bg-blue-500/5 rounded-full blur-xl pointer-events-none" />
-              <div>
-                <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-2xl bg-blue-500/20 border border-blue-400/40 flex items-center justify-center font-titulo text-xl font-bold text-blue-300">
-                    SV
-                  </div>
-                  <div>
-                    <h3 className="font-titulo text-xl font-bold uppercase text-bege">Seu Valdir, 46 anos</h3>
-                    <p className="text-xs text-texto-2">Serra Gaúcha / RS · 18 hectares cooperados</p>
-                  </div>
-                </div>
-                <div className="mt-6 space-y-3 text-sm text-texto-2">
-                  <p><strong className="text-bege">Culturas:</strong> Milho e uva vinífera.</p>
-                  <p><strong className="text-bege">Comportamento:</strong> Lê bem, porém trabalha o dia inteiro no trator. Medo de chuvas em excesso, granizo e apodrecimento fúngico.</p>
-                  <p><strong className="text-bege">Como o Argos atua:</strong> Notificações em nível de severidade para aplicação preventiva de calda e abertura de valas de escoamento.</p>
-                </div>
-              </div>
-              <div className="mt-6 pt-4 border-t border-linha/50 text-xs text-bege font-semibold">
-                Perfil de Produtor Cooperado (B2B2C)
-              </div>
-            </div>
+            <CardPersona
+              iniciais="SV"
+              nome="Seu Valdir, 46 anos"
+              subtitulo="Serra Gaúcha / RS · 18 hectares cooperados"
+              tema="azul"
+              destaqueRodape="Perfil de Produtor Cooperado (B2B2C)"
+              topicos={[
+                {
+                  rotulo: "Culturas",
+                  descricao: "Milho e uva vinífera.",
+                },
+                {
+                  rotulo: "Comportamento",
+                  descricao:
+                    "Lê bem, porém trabalha o dia inteiro no trator. Medo de chuvas em excesso, granizo e apodrecimento fúngico.",
+                },
+                {
+                  rotulo: "Como o Argos atua",
+                  descricao:
+                    "Notificações em nível de severidade para aplicação preventiva de calda e abertura de valas de escoamento.",
+                },
+              ]}
+            />
           </div>
         </div>
       </section>
 
       {/* SIMULADOR INTERATIVO */}
       <section id="demonstracao" className="relative py-24 md:py-32">
-        <div className="mx-auto max-w-[1240px] px-6 lg:px-8">
-          <div data-reveal className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-[0.16em] text-salvia">Demonstração Interativa</span>
-              <h2 className="font-titulo text-[clamp(32px,3.8vw,50px)] font-extrabold uppercase leading-[1.08] text-bege mt-2">
-                Simule o copiloto em dois cenários reais
-              </h2>
-              <p className="mt-3 text-texto-2 text-base max-w-[680px]">
-                Selecione abaixo o perfil para ver como o modelo de inteligência artificial, o algoritmo de triagem e o sintetizador de voz reagem aos dados meteorológicos oficiais.
-              </p>
-            </div>
-
-            {/* Alternador de Cenários */}
-            <div className="flex rounded-2xl border border-linha bg-card p-1.5 shrink-0">
-              <button
-                type="button"
-                onClick={() => {
-                  setCenarioAtivo("cida");
-                  if (estaOuvindo) window.speechSynthesis.cancel();
-                  setEstaOuvindo(false);
-                }}
-                className={`rounded-xl px-5 py-2.5 font-titulo text-sm font-semibold uppercase tracking-wider transition-all ${
-                  cenarioAtivo === "cida"
-                    ? "bg-salvia text-fundo shadow-md"
-                    : "text-texto-2 hover:text-bege"
-                }`}
-              >
-                Dona Cida (Sertão PE)
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setCenarioAtivo("valdir");
-                  if (estaOuvindo) window.speechSynthesis.cancel();
-                  setEstaOuvindo(false);
-                }}
-                className={`rounded-xl px-5 py-2.5 font-titulo text-sm font-semibold uppercase tracking-wider transition-all ${
-                  cenarioAtivo === "valdir"
-                    ? "bg-salvia text-fundo shadow-md"
-                    : "text-texto-2 hover:text-bege"
-                }`}
-              >
-                Seu Valdir (Serra RS)
-              </button>
-            </div>
-          </div>
-
-          {/* Painel do Simulador Dinâmico */}
-          <div data-reveal className="mt-10 rounded-[32px] border-2 border-linha/90 bg-card p-6 md:p-10 shadow-[0_30px_70px_rgba(0,0,0,0.55)]">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              {/* Esquerda: Informações do Contexto e da Roça */}
-              <div className="lg:col-span-5 flex flex-col gap-6">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="h-3 w-3 rounded-full bg-salvia" />
-                    <span className="font-mono text-xs uppercase tracking-wider text-salvia">Perfil da Propriedade no Banco</span>
-                  </div>
-                  <h3 className="font-titulo text-2xl font-bold uppercase text-bege mt-2">
-                    {cenario.produtor} ({cenario.idade} anos)
-                  </h3>
-                  <p className="text-sm text-texto-2 mt-1">{cenario.localidade}</p>
-                </div>
-
-                <div className="space-y-3 rounded-2xl border border-linha/80 bg-fundo/70 p-5 text-sm">
-                  <div className="flex justify-between py-1 border-b border-linha/40">
-                    <span className="text-texto-2">Área Declarada:</span>
-                    <span className="font-semibold text-bege">{cenario.area}</span>
-                  </div>
-                  <div className="flex justify-between py-1 border-b border-linha/40">
-                    <span className="text-texto-2">Culturas:</span>
-                    <span className="font-semibold text-bege">{cenario.culturas.join(", ")}</span>
-                  </div>
-                  <div className="flex flex-col py-1 border-b border-linha/40">
-                    <span className="text-texto-2">Condição de Acesso:</span>
-                    <span className="text-bege text-xs mt-1">{cenario.condicaoAcesso}</span>
-                  </div>
-                  <div className="flex flex-col py-1">
-                    <span className="text-texto-2">Desafio Meteorológico:</span>
-                    <span className="text-ambar text-xs mt-1 font-medium">{cenario.desafioClima}</span>
-                  </div>
-                </div>
-
-                {/* Bloco de Predição de Machine Learning */}
-                <div className="rounded-2xl border border-salvia/30 bg-mata/20 p-5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono uppercase tracking-widest text-salvia">Módulo de IA Preditiva</span>
-                    <span className="text-[10px] bg-salvia/30 text-salvia px-2 py-0.5 rounded font-mono">joblib / Scikit-Learn</span>
-                  </div>
-                  <div className="mt-3 space-y-2 text-xs">
-                    <div>
-                      <span className="text-texto-2">Rendimento Esperado: </span>
-                      <strong className="text-bege">{cenario.previsaoIA.rendimentoEstimado}</strong>
-                    </div>
-                    <div>
-                      <span className="text-texto-2">Classificação de Quebra: </span>
-                      <strong className="text-amber-400 font-bold">{cenario.previsaoIA.riscoQuebra}</strong>
-                    </div>
-                    <div>
-                      <span className="text-texto-2">Probabilidade Estimada: </span>
-                      <span className="text-bege">{cenario.previsaoIA.probabilidade}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Direita: O Copiloto Digital em Ação (Tela "Hoje" gerada) */}
-              <div className="lg:col-span-7 rounded-3xl border-2 border-linha/90 bg-fundo p-6 md:p-8 flex flex-col gap-6 shadow-inner">
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-linha/60 pb-4">
-                  <div>
-                    <span className="text-[11px] font-mono uppercase tracking-widest text-texto-2">Painel de Alerta Ativo</span>
-                    <h4 className="font-titulo text-xl font-bold uppercase text-bege">Aviso em Linguagem Simples</h4>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => falarAlerta(cenario.audioTexto)}
-                    className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-all ${
-                      estaOuvindo
-                        ? "border-red-500 bg-red-950/40 text-red-300 animate-pulse"
-                        : "border-salvia bg-salvia/20 text-salvia hover:bg-salvia hover:text-fundo"
-                    }`}
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4">
-                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-                      <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-                    </svg>
-                    {estaOuvindo ? "Parar Leitura" : "Ouvir em Voz Alta"}
-                  </button>
-                </div>
-
-                {/* Badge Alerta Oficial */}
-                <div>
-                  <BadgeAlerta
-                    nivel={cenario.alertaNivel}
-                    titulo={cenario.alertaTitulo}
-                    tamanho="grande"
-                    className="w-full justify-start text-lg"
-                  />
-                  <p className="mt-3 text-base text-bege pl-2">
-                    {cenario.alertaMensagem}
-                  </p>
-                </div>
-
-                {/* Ação Prática Recomendada */}
-                <div className="rounded-2xl border border-linha bg-card/80 p-5">
-                  <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-ambar">
-                    <span>💡 Orientação Prática Imediata</span>
-                  </div>
-                  <p className="mt-2 text-sm text-bege font-medium leading-relaxed">
-                    {cenario.acaoRecomendada}
-                  </p>
-                </div>
-
-                {/* Impacto Financeiro Evitado & Fonte Oficial */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  <div className="rounded-xl border border-linha/60 bg-card/40 p-3.5">
-                    <span className="text-[11px] text-texto-2 font-mono uppercase block">Impacto Econômico Evitado:</span>
-                    <span className="text-xs font-semibold text-salvia mt-1 block">{cenario.impactoEvitado}</span>
-                  </div>
-                  <div className="rounded-xl border border-linha/60 bg-card/40 p-3.5">
-                    <span className="text-[11px] text-texto-2 font-mono uppercase block">Fonte Oficial Auditada:</span>
-                    <span className="text-xs font-semibold text-bege mt-1 block">{cenario.fonteOficial}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <SimuladorCenarios />
       </section>
 
-      {/* =========================================================
-          6. COMO O ARGOS FUNCIONA: A JORNADA EM 5 PASSOS
-          (Interativa, fluída e sem grades monótonas)
-      ========================================================= */}
+      {/* COMO O ARGOS FUNCIONA: A JORNADA EM 5 PASSOS
+          (Interativa, fluída e sem grades monótonas) */}
       <section className="relative bg-[#1A130E] py-24 md:py-32 border-t border-b border-linha/70">
         <div className="mx-auto max-w-[1240px] px-6 lg:px-8">
           <div data-reveal className="max-w-[800px]">
