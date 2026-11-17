@@ -309,6 +309,30 @@ export default function Faq() {
                                 </button>
                             )}
                         </div>
+
+                        {/* filtros de categoria*/}
+                        <div className="flex flex-wrap items-center gap-2">
+                            <span className="mr-1 text-xs font-semibold uppercase tracking-wider text-texto-2">
+                                Filtrar por:
+                            </span>
+                            {categorias.map((cat) => {
+                                const ativa = categoriaAtiva === cat;
+                                return (
+                                    <button
+                                        key={cat}
+                                        type="button"
+                                        onClick={() => setCategoriaAtiva(cat)}
+                                        className={`min-h-[40px] cursor-pointer rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-salvia ${
+                                            ativa
+                                                ? "bg-salvia text-fundo shadow-sm"
+                                                : "border border-linha bg-fundo/50 text-texto-2 hover:border-salvia/50 hover:text-bege"
+                                        }`}
+                                    >
+                                        {cat}
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </div>
                 </div>
             </section>
