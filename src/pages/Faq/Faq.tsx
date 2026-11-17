@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { Link } from "react-router";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import ScrollReveal from "../../components/ScrollReveal/ScrollReveal";
@@ -381,6 +382,77 @@ export default function Faq() {
                             </button>
                         </div>
                     )}
+                </div>
+            </section>
+
+            {/* ainda tem duvidas */}
+            <section className="relative overflow-hidden bg-terra-fundo py-16">
+                <svg
+                    className="pointer-events-none absolute inset-0 h-full w-full opacity-50"
+                    aria-hidden="true"
+                    viewBox="0 0 1440 280"
+                    preserveAspectRatio="none"
+                >
+                    <defs>
+                        <pattern
+                            id="faq-contato-pontos"
+                            width="22"
+                            height="22"
+                            patternUnits="userSpaceOnUse"
+                        >
+                            <circle cx="2" cy="2" r="1.25" fill="#3A2F27" />
+                        </pattern>
+                    </defs>
+                    <rect
+                        width="100%"
+                        height="100%"
+                        fill="url(#faq-contato-pontos)"
+                    />
+                </svg>
+
+                <div className="relative mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-between gap-8 px-7">
+                    <div data-reveal className="max-w-[620px]">
+                        <span className="text-xs font-semibold uppercase tracking-[.14em] text-salvia">
+                            Suporte & Parcerias
+                        </span>
+                        <h2 className="mt-2 font-titulo text-[clamp(28px,3.4vw,44px)] font-extrabold uppercase leading-tight text-bege">
+                            Não encontrou a resposta que procurava?
+                        </h2>
+                        <p className="mt-3 text-lg text-texto-2">
+                            Nossa equipe está à disposição para esclarecer
+                            dúvidas de produtores, cooperativas e técnicos
+                            agrícolas.
+                        </p>
+                    </div>
+
+                    <div data-reveal className="flex flex-wrap gap-4">
+                        <Link
+                            to="/contato"
+                            className="inline-flex min-h-[56px] items-center justify-center gap-3 rounded-full bg-salvia px-7 font-titulo text-base font-bold uppercase tracking-wider text-fundo transition-transform hover:-translate-y-0.5 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-salvia"
+                        >
+                            Falar com nossa equipe
+                            <svg
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M5 12h14M13 6l6 6-6 6" />
+                            </svg>
+                        </Link>
+
+                        <Link
+                            to="/triagem"
+                            className="inline-flex min-h-[56px] items-center justify-center gap-2 rounded-full border border-linha bg-transparent px-7 font-titulo text-base font-semibold uppercase tracking-wider text-bege transition-all hover:border-salvia hover:text-salvia focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ambar"
+                        >
+                            Começar a triagem agora
+                        </Link>
+                    </div>
                 </div>
             </section>
 
