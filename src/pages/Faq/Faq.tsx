@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import ScrollReveal from "../../components/ScrollReveal/ScrollReveal";
 import { type CardDuvidaProps } from "../../components/CardDuvida/CardDuvida";
@@ -120,6 +121,52 @@ export default function Faq() {
     return (
         <main className="w-full overflow-hidden bg-fundo font-corpo text-lg leading-relaxed text-bege">
             <ScrollReveal />
+
+            {/* HERO */}
+            <section
+                id="inicio"
+                className="relative overflow-x-clip overflow-y-visible bg-[radial-gradient(720px_440px_at_80%_35%,rgba(125,190,140,.18),transparent_70%),radial-gradient(540px_340px_at_10%_0%,rgba(217,166,80,.12),transparent_70%),#17110D]"
+            >
+                {/* Linhas de relevo como background sutil */}
+                <svg
+                    aria-hidden="true"
+                    viewBox="0 0 1440 400"
+                    preserveAspectRatio="none"
+                    className="pointer-events-none absolute inset-0 h-full w-full opacity-60"
+                >
+                    <g
+                        fill="none"
+                        stroke="#3A2F27"
+                        strokeWidth="1.5"
+                        vectorEffect="non-scaling-stroke"
+                    >
+                        <path d="M-20 280 C 260 210 520 340 800 260 S 1250 210 1460 270" />
+                        <path d="M-20 320 C 260 250 520 380 800 300 S 1250 250 1460 310" />
+                        <path d="M-20 360 C 260 290 520 420 800 340 S 1250 290 1460 350" />
+                    </g>
+                </svg>
+
+                <Navbar />
+
+                <div
+                    data-reveal
+                    className="relative mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-7 pt-14 pb-20 sm:pb-24"
+                >
+                    <div className="flex flex-wrap items-center gap-3">
+                        <span className="text-S uppercase tracking-wider text-salvia">Dúvidas Frequentes</span>
+                    </div>
+
+                    <h1 className="font-titulo text-[clamp(38px,5.8vw,76px)] font-extrabold uppercase leading-[1.05] text-bege">
+                        Perguntas sobre <br />
+                        <span className="text-salvia">o seu copiloto.</span>
+                    </h1>
+
+                    <p className="max-w-[640px] text-[clamp(18px,1.9vw,22px)] text-texto-2">
+                        Tire suas dúvidas sobre o funcionamento do Argos na roça,
+                        acessibilidade, conectividade e como ele protege sua colheita.
+                    </p>
+                </div>
+            </section>
 
             <Footer />
         </main>
