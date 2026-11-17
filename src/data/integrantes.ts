@@ -12,6 +12,7 @@ export const integrantes: Integrante[] = [
         turma: '1TDSPF',
         funcao: 'Front-end',
         materias: ['Front-End Design Engineering'],
+        foto: '/integrantes/560871.webp',
     },
     {
         rm: '573301',
@@ -43,5 +44,6 @@ export const integrantes: Integrante[] = [
         turma: '1TDSPF',
         funcao: 'Python',
         materias: ['Computational Thinking Using Python'],
+        foto: '/integrantes/569178.webp',
     },
 ]
