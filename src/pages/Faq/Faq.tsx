@@ -165,6 +165,82 @@ export default function Faq() {
                         Tire suas dúvidas sobre o funcionamento do Argos na roça,
                         acessibilidade, conectividade e como ele protege sua colheita.
                     </p>
+
+                    {/* cards de destaque */}
+                    <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3 max-w-[880px]">
+                        <div className="rounded-xl border border-linha bg-card/60 p-4 backdrop-blur-xs">
+                            <div className="flex items-center gap-2.5 text-salvia">
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2.2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                </svg>
+                                <span className="font-titulo text-sm font-bold uppercase tracking-wider">
+                                    100% Gratuito
+                                </span>
+                            </div>
+                            <p className="mt-1.5 text-sm text-texto-2">
+                                Sem mensalidade para o produtor rural familiar.
+                            </p>
+                        </div>
+
+                        <div className="rounded-xl border border-linha bg-card/60 p-4 backdrop-blur-xs">
+                            <div className="flex items-center gap-2.5 text-ambar">
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2.2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" />
+                                </svg>
+                                <span className="font-titulo text-sm font-bold uppercase tracking-wider">
+                                    Guarda Offline
+                                </span>
+                            </div>
+                            <p className="mt-1.5 text-sm text-texto-2">
+                                Os últimos alertas ficam salvos no seu aparelho.
+                            </p>
+                        </div>
+
+                        <div className="rounded-xl border border-linha bg-card/60 p-4 backdrop-blur-xs">
+                            <div className="flex items-center gap-2.5 text-salvia">
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2.2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="m9 12 2 2 4-4" />
+                                </svg>
+                                <span className="font-titulo text-sm font-bold uppercase tracking-wider">
+                                    Voz e Figuras
+                                </span>
+                            </div>
+                            <p className="mt-1.5 text-sm text-texto-2">
+                                Fácil para quem lê pouco ou prefere ouvir.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </section>
 
