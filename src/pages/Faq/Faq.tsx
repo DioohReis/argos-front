@@ -244,6 +244,75 @@ export default function Faq() {
                 </div>
             </section>
 
+            {/* secao faq*/}
+            <section className="relative overflow-hidden bg-card py-16 sm:py-20">
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -left-40 top-20 h-96 w-96 rounded-full bg-terra opacity-10 blur-3xl"
+                />
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -right-32 bottom-20 h-80 w-80 rounded-full bg-salvia opacity-10 blur-3xl"
+                />
+
+                <div className="relative mx-auto w-full max-w-[1100px] px-6 sm:px-8">
+                    {/* busca e filtros */}
+                    <div data-reveal className="mb-10 flex flex-col gap-6">
+                        {/* input de busca */}
+                        <div className="relative w-full">
+                            <label htmlFor="busca-faq" className="sr-only">
+                                Buscar pergunta ou palavra-chave
+                            </label>
+                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-texto-2">
+                                <svg
+                                    width="22"
+                                    height="22"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2.2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <circle cx="11" cy="11" r="8" />
+                                    <path d="m21 21-4.3-4.3" />
+                                </svg>
+                            </div>
+                            <input
+                                id="busca-faq"
+                                type="search"
+                                value={busca}
+                                onChange={(e) => setBusca(e.target.value)}
+                                placeholder="Busque por dúvida, ex.: internet, senha, custo, pragas..."
+                                className="w-full min-h-[56px] rounded-2xl border border-linha bg-fundo/90 py-3.5 pr-4 pl-12 text-base text-bege placeholder:text-texto-2/70 transition-all focus:border-salvia focus:bg-fundo focus:outline-none focus:ring-2 focus:ring-salvia/40"
+                            />
+                            {busca && (
+                                <button
+                                    type="button"
+                                    onClick={() => setBusca("")}
+                                    className="absolute inset-y-0 right-0 flex items-center pr-4 text-texto-2 hover:text-bege focus-visible:outline-none"
+                                    aria-label="Limpar busca"
+                                >
+                                    <svg
+                                        width="18"
+                                        height="18"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2.5"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    >
+                                        <path d="M18 6 6 18M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <Footer />
         </main>
     );
