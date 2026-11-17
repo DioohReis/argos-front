@@ -1,3 +1,4 @@
+import { useState, useMemo } from "react";
 import Footer from "../../components/Footer/Footer";
 import ScrollReveal from "../../components/ScrollReveal/ScrollReveal";
 import { type CardDuvidaProps } from "../../components/CardDuvida/CardDuvida";
@@ -99,6 +100,23 @@ const categorias = [
 ];
 
 export default function Faq() {
+    const [busca, setBusca] = useState("");
+    const [categoriaAtiva, setCategoriaAtiva] = useState("Todas");
+
+    const itensFiltrados = useMemo(() => {
+        const termo = busca.trim().toLowerCase();
+        return faqData.filter((item) => {
+            const matchCategoria =
+                categoriaAtiva === "Todas" || item.categoria === categoriaAtiva;
+            const matchBusca =
+                !termo ||
+                item.pergunta.toLowerCase().includes(termo) ||
+                item.resposta.toLowerCase().includes(termo) ||
+                item.categoria.toLowerCase().includes(termo);
+            return matchCategoria && matchBusca;
+        });
+    }, [busca, categoriaAtiva]);
+
     return (
         <main className="w-full overflow-hidden bg-fundo font-corpo text-lg leading-relaxed text-bege">
             <ScrollReveal />
