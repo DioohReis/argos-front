@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import ScrollReveal from "../../components/ScrollReveal/ScrollReveal";
-import { type CardDuvidaProps } from "../../components/CardDuvida/CardDuvida";
+import CardDuvida, { type CardDuvidaProps } from "../../components/CardDuvida/CardDuvida";
 
 //Duvidas
 const faqData: (CardDuvidaProps & { id: string })[] = [
@@ -334,6 +334,53 @@ export default function Faq() {
                             })}
                         </div>
                     </div>
+
+                    {/* lista de duvidas */}
+                    {itensFiltrados.length > 0 ? (
+                        <div className="flex flex-col gap-4">
+                            {itensFiltrados.map((item) => (
+                                <CardDuvida key={item.id} {...item} />
+                            ))}
+                        </div>
+                    ) : (
+                        <div
+                            data-reveal
+                            className="rounded-2xl border border-linha bg-fundo/70 p-10 text-center"
+                        >
+                            <svg
+                                className="mx-auto mb-3 text-texto-2"
+                                width="44"
+                                height="44"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                            >
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="8" y1="12" x2="16" y2="12" />
+                            </svg>
+                            <h3 className="font-titulo text-xl font-bold text-bege">
+                                Nenhuma dúvida encontrada
+                            </h3>
+                            <p className="mt-1.5 text-texto-2">
+                                Não achamos nada para "{busca}". Tente outra
+                                palavra ou limpe o filtro.
+                            </p>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setBusca("");
+                                    setCategoriaAtiva("Todas");
+                                }}
+                                className="mt-5 inline-flex min-h-[46px] items-center justify-center rounded-xl border border-salvia bg-transparent px-5 font-titulo text-sm font-semibold uppercase text-salvia transition-colors hover:bg-salvia hover:text-fundo"
+                            >
+                                Mostrar todas as dúvidas
+                            </button>
+                        </div>
+                    )}
                 </div>
             </section>
 
