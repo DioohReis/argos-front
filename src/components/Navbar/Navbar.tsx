@@ -5,6 +5,7 @@ import LogoArgos from "../LogoArgos/LogoArgos";
 // botao mobile
 const navLinks = [
     { label: "Início", to: "/", delay: "delay-[60ms]" },
+    { label: "Mapa", to: "/mapa", delay: "delay-[82ms]" },
     { label: "Sobre", to: "/sobre", delay: "delay-[105ms]" },
     { label: "Solução", to: "/solucao", delay: "delay-[150ms]" },
     { label: "Integrantes", to: "/integrantes", delay: "delay-[195ms]" },
