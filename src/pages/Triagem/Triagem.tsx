@@ -5,12 +5,11 @@ import { AvisoDeTela, Campo, ENTRADA, Escolha } from "../../components/CampoForm
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
 import { CANAIS, ESTAGIOS, FONTES_DE_AGUA, IRRIGACOES, LEITURA, SIM_NAO } from "../../data/opcoes";
-import { useBusca } from "../../hooks/useBusca";
-import { ApiError, cadastrarPlantio, cadastrarPropriedade, cadastrarProdutor, listarCulturas, listarMunicipios } from "../../services/api";
+import { CULTURAS, MUNICIPIOS, municipioPorId } from "../../data/referencias";
+import { ApiError, cadastrarPlantio, cadastrarPropriedade, cadastrarProdutor } from "../../services/api";
 import { useConta } from "../../contexto/conta";
 import type { Plantio, Produtor, Propriedade } from "../../types/api";
 import { hojeEmTexto, lerNumero } from "../../utils/datas";
-import { capitalizar } from "../../utils/textos";
 
 /*
     Triagem: formulário em 3 passos que cadastra, nesta ordem, o produtor, a roça (propriedade) e,
@@ -35,7 +34,6 @@ interface Dados {
     propAreaHa: string;
     fonteAgua: string;
     irrigacao: string;
-    areaAlagavel: string;
     culturaId: string;
     plantioAreaHa: string;
     dataPlantio: string;
@@ -45,7 +43,7 @@ interface Dados {
 
 const VAZIO: Dados = {
     nome: "", telefone: "", municipioId: "", canalPreferido: "", preferenciaLeitura: "", anosExperiencia: "",
-    recebeAter: "", consentimento: false, propNome: "", propAreaHa: "", fonteAgua: "", irrigacao: "", areaAlagavel: "",
+    recebeAter: "", consentimento: false, propNome: "", propAreaHa: "", fonteAgua: "", irrigacao: "",
     culturaId: "", plantioAreaHa: "", dataPlantio: "", dataColheita: "", estagio: "",
 };
 
@@ -100,8 +98,6 @@ const PASSO_DO_ERRO: Record<string, number> = { produtor: 0, propriedade: 1, pla
 export default function Triagem() {
     const { conta, entrar, sair } = useConta();
     const [lembrar, setLembrar] = useState(true);
-    const municipios = useBusca("municipios", (sinal) => listarMunicipios(sinal));
-    const culturas = useBusca("culturas", (sinal) => listarCulturas(sinal));
 
     const [passo, setPasso] = useState(0);
     const [dados, setDados] = useState<Dados>(VAZIO);
@@ -130,7 +126,7 @@ export default function Triagem() {
         setErroGeral("");
     };
 
-    const municipioEscolhido = municipios.dados?.find((m) => String(m.id) === dados.municipioId);
+    const municipioEscolhido = municipioPorId(Number(dados.municipioId));
 
     function continuar() {
         const novos = passo === 0 ? validarVoce(dados) : validarRoca(dados);
@@ -172,7 +168,6 @@ export default function Triagem() {
                     areaHa: lerNumero(dados.propAreaHa),
                     fonteAgua: dados.fonteAgua || undefined,
                     irrigacao: dados.irrigacao || undefined,
-                    areaAlagavel: dados.areaAlagavel || undefined,
                 });
                 setBloqueio((b) => ({ ...b, propriedade: true }));
             }
@@ -193,8 +188,8 @@ export default function Triagem() {
                 {
                     produtorId: produtor.id,
                     produtorNome: produtor.nome,
-                    municipioId: produtor.municipio.id,
-                    municipioNome: produtor.municipio.nome,
+                    municipioId: produtor.municipioId,
+                    municipioNome: municipioPorId(produtor.municipioId)?.nome ?? "",
                     propriedadeId: propriedade.id,
                     propriedadeNome: propriedade.nome,
                 },
@@ -236,9 +231,6 @@ export default function Triagem() {
         else void enviar();
     }
 
-    const carregandoApoio = municipios.carregando || culturas.carregando;
-    const falhaNoApoio = municipios.erro ?? culturas.erro;
-
     return (
         <main className="w-full overflow-hidden bg-fundo font-corpo text-lg leading-relaxed text-bege">
             <section className="relative overflow-hidden bg-[radial-gradient(700px_420px_at_84%_30%,rgba(125,190,140,.16),transparent_70%),radial-gradient(520px_320px_at_6%_0%,rgba(217,166,80,.10),transparent_70%),#17110D]">
@@ -247,7 +239,7 @@ export default function Triagem() {
                     <p className="text-sm font-semibold uppercase tracking-[.14em] text-salvia">Triagem</p>
                     <h1 className="font-titulo text-[clamp(40px,5.4vw,72px)] leading-none font-extrabold uppercase">Conte da sua roça.</h1>
                     <p className="max-w-[620px] text-[clamp(19px,2vw,22px)] text-texto-2">
-                        São três passos, com perguntas curtas. Com as respostas, o Argos mostra os avisos do seu município e
+                        São três passos, com perguntas curtas. Com as respostas, o Argos guarda a sua roça e
                         acompanha o que você plantou.
                     </p>
                 </div>
@@ -265,12 +257,12 @@ export default function Triagem() {
                                 {concluido.plantou
                                     ? "Guardamos você, a sua roça e o seu plantio. "
                                     : "Guardamos você e a sua roça. Quando plantar, é só voltar aqui. "}
-                                Agora veja os avisos do seu município.
+                                Agora veja a sua roça.
                                 {lembrar ? " Este aparelho vai lembrar de você na próxima vez." : ""}
                             </p>
                             <div className="flex flex-wrap gap-3.5">
                                 <Link to="/hoje" className="inline-flex min-h-14 items-center justify-center rounded-[14px] border-2 border-salvia bg-salvia px-[30px] font-titulo text-[17px] font-semibold uppercase tracking-[0.04em] text-fundo transition-transform duration-150 hover:scale-[1.035] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ambar motion-reduce:transition-none">
-                                    Ver os avisos de hoje
+                                    Ver a minha roça
                                 </Link>
                                 <Link to="/mapa" className="inline-flex min-h-14 items-center justify-center rounded-[14px] border-2 border-linha px-[30px] font-titulo text-[17px] font-semibold uppercase tracking-[0.04em] text-bege transition-transform duration-150 hover:scale-[1.035] hover:border-bege focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ambar motion-reduce:transition-none">
                                     Abrir o mapa
@@ -302,18 +294,6 @@ export default function Triagem() {
                                 ))}
                             </ol>
 
-                            {carregandoApoio && (
-                                <AvisoDeTela tipo="carregando">
-                                    Buscando os municípios e as culturas…
-                                    {(municipios.demorando || culturas.demorando) && " O servidor estava dormindo e está acordando, pode levar alguns segundos."}
-                                </AvisoDeTela>
-                            )}
-                            {falhaNoApoio && (
-                                <AvisoDeTela tipo="erro" acao={{ rotulo: "Tentar de novo", aoClicar: () => { municipios.tentarDeNovo(); culturas.tentarDeNovo(); } }}>
-                                    {falhaNoApoio.message}
-                                </AvisoDeTela>
-                            )}
-
                             <h2 ref={tituloRef} tabIndex={-1} className="font-titulo text-[clamp(26px,3.2vw,38px)] leading-tight font-extrabold uppercase focus:outline-none">
                                 {passo === 0 && "Quem é você?"}
                                 {passo === 1 && "Como é a sua roça?"}
@@ -333,7 +313,7 @@ export default function Triagem() {
                                         {(a) => (
                                             <select {...a} className={ENTRADA} value={dados.municipioId} onChange={(e) => definir("municipioId", e.target.value, "produtor.municipioId")}>
                                                 <option value="">Escolha…</option>
-                                                {municipios.dados?.map((m) => <option key={m.id} value={m.id}>{m.nome} ({m.uf})</option>)}
+                                                {MUNICIPIOS.map((m) => <option key={m.id} value={m.id}>{m.nome} ({m.uf})</option>)}
                                             </select>
                                         )}
                                     </Campo>
@@ -397,7 +377,6 @@ export default function Triagem() {
                                             </select>
                                         )}
                                     </Campo>
-                                    <Escolha rotulo="A roça costuma alagar?" opcoes={SIM_NAO} valor={dados.areaAlagavel} onChange={(v) => definir("areaAlagavel", v, "propriedade.areaAlagavel")} erro={erros["propriedade.areaAlagavel"]} />
                                 </fieldset>
                             )}
 
@@ -408,7 +387,7 @@ export default function Triagem() {
                                         {(a) => (
                                             <select {...a} className={ENTRADA} value={dados.culturaId} onChange={(e) => definir("culturaId", e.target.value, "plantio.culturaId")}>
                                                 <option value="">Não plantei nada ainda</option>
-                                                {culturas.dados?.map((c) => <option key={c.id} value={c.id}>{capitalizar(c.nome)}</option>)}
+                                                {CULTURAS.map((c) => <option key={c.id} value={c.id}>{c.nome}</option>)}
                                             </select>
                                         )}
                                     </Campo>
@@ -439,7 +418,7 @@ export default function Triagem() {
                                 )}
                                 <button
                                     type="submit"
-                                    disabled={enviando || carregandoApoio || Boolean(falhaNoApoio)}
+                                    disabled={enviando}
                                     className="min-h-14 cursor-pointer rounded-[14px] border-2 border-salvia bg-salvia px-[30px] font-titulo text-[17px] font-semibold uppercase tracking-[0.04em] text-fundo transition-transform duration-150 hover:scale-[1.035] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ambar disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none"
                                 >
                                     {enviando ? "Enviando…" : passo < 2 ? "Continuar" : "Terminar"}
