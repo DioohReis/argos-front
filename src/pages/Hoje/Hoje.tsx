@@ -83,7 +83,7 @@ export default function Hoje() {
                                         <li key={plantio.id} className="flex flex-col gap-3 rounded-3xl border border-linha bg-card p-6">
                                             <p className="font-titulo text-2xl font-extrabold uppercase">{culturaPorId(plantio.culturaId)?.nome ?? "Cultura"}</p>
                                             <p className="text-salvia">{rotuloDe(ESTAGIOS, plantio.estagio)}</p>
-                                            <p className="text-texto-2">{plantio.areaHa} ha · plantado em {formatarData(plantio.dataPlantio)}</p>
+                                            <p className="text-texto-2">{plantio.areaHa.toLocaleString("pt-BR")} ha · plantado em {formatarData(plantio.dataPlantio)}</p>
                                             <p>
                                                 {dias < 0
                                                     ? `A colheita estava prevista para ${formatarData(plantio.dataColheitaPrevista)}.`
