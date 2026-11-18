@@ -1,14 +1,8 @@
 import type {
-    AlertaApi,
     CampoComErro,
-    CulturaApi,
     ErroDaApi,
-    Municipio,
-    Ocorrencia,
-    OcorrenciaEntrada,
     PlantioEntrada,
     Plantio,
-    PragaApi,
     Produtor,
     ProdutorEntrada,
     Propriedade,
@@ -17,9 +11,18 @@ import type {
 
 /**
  * Cliente da API Java do Argos. O endereço vem da variável VITE_API_URL (no Vite, só variáveis que
- * começam com VITE_ chegam ao navegador). Sem a variável, usa a API rodando na própria máquina.
+ * começam com VITE_ chegam ao navegador). Sem a variável, usa a API publicada no Render; para
+ * testar com a API rodando na própria máquina, use VITE_API_URL=http://localhost:8080.
  */
-const BASE = String(import.meta.env.VITE_API_URL ?? 'http://localhost:8080').replace(/\/+$/, '')
+const BASE = String(import.meta.env.VITE_API_URL ?? 'https://argos-api-java.onrender.com').replace(/\/+$/, '')
+
+/** A API manda cada campo inválido como "campo: mensagem"; a tela precisa dos dois separados. */
+function separarCampos(textos: string[]): CampoComErro[] {
+    return textos.map((texto) => {
+        const i = texto.indexOf(': ')
+        return i === -1 ? { campo: '', mensagem: texto } : { campo: texto.slice(0, i), mensagem: texto.slice(i + 2) }
+    })
+}
 
 /** Erro de uma chamada à API: guarda o status HTTP e, no 400 de validação, os campos com problema. */
 export class ApiError extends Error {
@@ -71,23 +74,11 @@ async function pedir<T>(rota: string, { metodo = 'GET', corpo, sinal }: Opcoes =
         throw new ApiError(
             resposta.status,
             erro?.mensagem ?? 'Algo deu errado do nosso lado. Tente de novo em instantes.',
-            erro?.campos ?? [],
+            separarCampos(erro?.campos ?? []).filter((c) => c.campo !== ''),
         )
     }
     return json as T
 }
-
-// ---- Tabelas de apoio (só leitura) ----
-
-export const listarMunicipios = (sinal?: AbortSignal) => pedir<Municipio[]>('/municipios', { sinal })
-
-export const listarCulturas = (sinal?: AbortSignal) => pedir<CulturaApi[]>('/culturas', { sinal })
-
-export const listarPragas = (sinal?: AbortSignal) => pedir<PragaApi[]>('/pragas', { sinal })
-
-/** Os avisos do município que ainda valem hoje, do mais grave para o mais leve. */
-export const listarAlertas = (municipioId: number, sinal?: AbortSignal) =>
-    pedir<AlertaApi[]>(`/municipios/${municipioId}/alertas`, { sinal })
 
 // ---- Cadastro: produtor, propriedade e plantio (1:N em cadeia) ----
 
@@ -109,11 +100,3 @@ export const cadastrarPlantio = (propriedadeId: number, dados: PlantioEntrada) =
 
 export const listarPlantios = (propriedadeId: number, sinal?: AbortSignal) =>
     pedir<Plantio[]>(`/propriedades/${propriedadeId}/plantios`, { sinal })
-
-// ---- Relato de praga ----
-
-export const listarOcorrencias = (plantioId: number, sinal?: AbortSignal) =>
-    pedir<Ocorrencia[]>(`/plantios/${plantioId}/ocorrencias`, { sinal })
-
-export const cadastrarOcorrencia = (plantioId: number, dados: OcorrenciaEntrada) =>
-    pedir<Ocorrencia>(`/plantios/${plantioId}/ocorrencias`, { metodo: 'POST', corpo: dados })
