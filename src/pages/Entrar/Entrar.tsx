@@ -144,7 +144,7 @@ export default function Entrar() {
                     )}
 
                     <details className="rounded-2xl border border-linha bg-fundo p-5">
-                        <summary className="cursor-pointer font-semibold text-salvia">Como funciona a entrada?</summary>
+                        <summary className="min-h-11 cursor-pointer py-2.5 font-semibold text-salvia">Como funciona a entrada?</summary>
                         <ul className="mt-4 flex list-disc flex-col gap-2.5 pl-5 text-texto-2">
                             <li>O Argos não pede senha. Ele reconhece você pelo telefone do cadastro.</li>
                             <li>Por isso, não conte para ninguém que usa o seu telefone no Argos: quem souber o número consegue entrar como você.</li>

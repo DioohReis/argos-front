@@ -274,7 +274,7 @@ export default function Triagem() {
                             {conta ? (
                                 <p className="rounded-2xl border border-linha bg-fundo px-5 py-4 text-texto-2">
                                     Você já entrou como <strong className="text-bege">{conta.produtorNome}</strong>. Se este cadastro é de outra pessoa,{" "}
-                                    <button type="button" onClick={sair} className="cursor-pointer font-semibold text-salvia underline underline-offset-4">saia primeiro</button>.
+                                    <button type="button" onClick={sair} className="cursor-pointer py-2 font-semibold text-salvia underline underline-offset-4">saia primeiro</button>.
                                 </p>
                             ) : (
                                 <p className="text-texto-2">
