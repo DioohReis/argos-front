@@ -63,7 +63,6 @@ export default function Conta() {
                                             <Item rotulo="Telefone" valor={esconderTelefone(produtor.dados.telefone)} />
                                             <Item rotulo="Recebe os avisos por" valor={rotuloDe(CANAIS, produtor.dados.canalPreferido)} />
                                             <Item rotulo="Prefere" valor={rotuloDe(LEITURA, produtor.dados.preferenciaLeitura)} />
-                                            <Item rotulo="Cadastrado em" valor={formatarData(produtor.dados.dataCadastro)} />
                                         </>
                                     )}
                                 </dl>

@@ -1,4 +1,5 @@
 import { ApiError, listarProdutores, listarPropriedadesDoProdutor } from './api'
+import { rotuloDoMunicipio, municipioPorId } from '../data/referencias'
 import type { DadosDaConta } from './sessao'
 
 /** Só os números do telefone: "(87) 99000-0001" vira "87990000001". */
@@ -22,13 +23,13 @@ export async function identificarPorTelefone(telefone: string, sinal?: AbortSign
     if (!achado) {
         throw new ApiError(404, 'Não achamos esse telefone. Confira os números ou faça o cadastro.')
     }
-    // A conta guarda a primeira roça do produtor (as telas "Hoje" e "Ocorrências" usam essa)
+    // A conta guarda a primeira roça do produtor (a tela "Hoje" usa essa)
     const roca = (await listarPropriedadesDoProdutor(achado.id, sinal))[0]
     return {
         produtorId: achado.id,
         produtorNome: achado.nome,
-        municipioId: achado.municipio.id,
-        municipioNome: achado.municipio.nome,
+        municipioId: achado.municipioId,
+        municipioNome: municipioPorId(achado.municipioId)?.nome ?? rotuloDoMunicipio(achado.municipioId),
         propriedadeId: roca?.id ?? null,
         propriedadeNome: roca?.nome ?? null,
     }
