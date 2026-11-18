@@ -12,7 +12,6 @@ import Conta from '../pages/Conta/Conta'
 import Hoje from '../pages/Hoje/Hoje'
 import Guia from '../pages/Guia/Guia'
 import Mapa from '../pages/Mapa/Mapa'
-import Ocorrencias from '../pages/Ocorrencias/Ocorrencias'
 import NotFound from '../pages/NotFound/NotFound'
 
 function AppRoutes() {
@@ -32,7 +31,6 @@ function AppRoutes() {
             <Route path="/hoje" element={<Hoje />} />
             <Route path="/guia/:cultura" element={<Guia />} />
             <Route path="/mapa" element={<Mapa />} />
-            <Route path="/ocorrencias" element={<Ocorrencias />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     )
