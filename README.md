@@ -3,18 +3,24 @@ Projeto para Global Solution 2026, FIAP — CitzenTech.
 
 ## API Java
 
-O front consome a API REST do Argos (repositório `argos-api-java`). O endereço da API fica na variável
-`VITE_API_URL`: copie `.env.example` para `.env.local` e troque pelo endereço da API (a do Render, no
-site publicado). Sem a variável, o front usa `http://localhost:8080`.
+O front consome a API REST do Argos (repositório `argos-api-java`), publicada em
+`https://argos-api-java.onrender.com`. É o endereço que o front usa quando a variável `VITE_API_URL` não existe.
+Para testar com a API rodando na sua máquina, copie `.env.example` para `.env.local` e use
+`VITE_API_URL=http://localhost:8080`.
 
-No site publicado, o endereço do front também precisa estar na variável `CORS_ORIGINS` da API, senão o
-navegador bloqueia as chamadas.
+No plano gratuito do Render a API dorme quando ninguém a usa: a primeira chamada pode levar até um minuto.
+As telas avisam quando isso acontece. No site publicado, o endereço do front também precisa estar na variável
+`CORS_ORIGINS` da API, senão o navegador bloqueia as chamadas.
 
 | Tela | Chamadas à API |
 |---|---|
-| Triagem | `GET /municipios` · `GET /culturas` · `POST /produtores` · `POST /produtores/{id}/propriedades` · `POST /propriedades/{id}/plantios` |
-| Hoje | `GET /municipios/{cd}/alertas` · `GET /propriedades/{id}/plantios` |
-| Ocorrências | `GET /pragas` · `GET /plantios/{id}/ocorrencias` · `POST /plantios/{id}/ocorrencias` |
+| Cadastro (Triagem) | `POST /produtores` · `POST /produtores/{id}/propriedades` · `POST /propriedades/{id}/plantios` |
+| Entrar | `GET /produtores` · `GET /produtores/{id}/propriedades` |
+| Hoje | `GET /propriedades/{id}/plantios` |
+| Conta | `GET /produtores/{id}` |
+
+A API só expõe produtores, propriedades e plantios. As listas de municípios e de culturas (que a API recebe
+como `municipioId` e `culturaId`) ficam em `src/data/referencias.ts`, iguais ao script `argos_banco.sql`.
 
 ## Cadastro, entrada e reconhecimento por aparelho
 
